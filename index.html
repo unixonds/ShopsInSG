@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant</title>
+    <script src="util.js"></script>
+<!--StoreID=ABC123&ProductID=DD57-->
+    <style>
+      @keyframes showMessage {
+        0% {
+          opacity: 0.8;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      @keyframes moveShrink {
+        0% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(100vw, -100vh) scale(0.05);
+          /*transform: translate(calc(100% - var(--button-width)), calc(-100% + var(--button-height))); /* Move to top right corner 
+          transform-origin: top right; /* Shrink from top right corner 
+          scale: 0.05; /* Shrink to 5% */
+        }
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+      }
+      @keyframes marquee {
+          0% {
+              transform: translateX(0%);
+          }
+          100% {
+              transform: translateX(-100%);
+          }
+      }
+      
+      body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0px;
+        box-sizing: border-box;
+        background-color: #111;
+        position: relative;
+        color: #fff;
+      }
+      /*      @keyframes enlargeAndMove {
+      0% {transform: scale(1) translate(0, 0);}
+      25% {transform: scale(2.5) translate(0, 0);}
+      50% { transform: scale(0.1) translate(100%, -100%);}
+      75% { transform: scale(0.1) translate(100%, -100%);
+        display: none;}
+      100% { transform: scale(1) translate(0, 0);
+        display: block;}
+      }*/
+  
+      button {
+        display: inline-block;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        border: 2px solid #3498db; /* Border color */
+        background: #d00;
+        border-radius: 12px; /* Rounded corners */
+        transition: background-color 0.3s, color 0.3s; /* Smooth transition on hover */
+        animation: enlargeAndMove 4s ease-in-out; /* Apply animation */
+      }
+  
+      button:hover {
+        background-color: #3498db; /* Change background color on hover */
+        color: #ffffff; /* Change text color on hover */
+      }
+      #cart {
+        display: none;
+  
+      }
+      #cart-icon {
+          position: fixed;
+          top: 20px;
+          right: 10px;
+          background-image: url(images/cart.svg);
+          background-size: 2.8rem 2.8rem;
+          background-color: #3498db;
+          background-position: center center;
+          background-repeat: no-repeat;
+          color: yellow;
+          padding: 8px;
+          border-radius: 50%;
+          cursor: pointer;
+          width: 3rem; 
+          height: 3rem;
+          z-index: 1;
+      }
+  
+      #cart-close {
+        display: none;
+        position: absolute;
+        top: -20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3rem;
+        color: red;
+        background-color: #444;
+        z-index: 3;
+        border-radius: 50%;
+        padding: 5px 20px;
+      }
+      #cart-container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      /* For first to maintain*/
+      #cart-title {
+        margin-right: 30px;
+        margin-bottom: 10px; /* Adjust this value for vertical gap */
+      }
+      #cart-icon:hover {
+        background-color: #294089;
+      }
+      /*Value Inside cart icon*/
+      #cart-count {
+        display: inline-block;
+        background-color: #810;
+        color: #ccc;
+        font-size: 12px;
+        padding: 2px 5px;
+        border-radius: 50%;
+      }
+      /*within page top most*/
+      #cart-grand-total {
+        color: red;
+        margin-right: 0;
+      }
+      /*Value Inside cart icon*/
+      #cart-total {
+        content: "$";
+        display: block;
+        background-color: #800;
+        opacity: 0.5;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+      #cart-total::before {
+        content: "$";
+      }
+      #checkout-page {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+      }
+      /*#checkout-page.hidden {
+        display: none;
+      }*/
+      #category-nav {
+        position: sticky;
+        width: 90%;
+        top: 1px;
+        height: 3rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        background-color: #315;
+        display: flex;
+      }
+      #category-nav a {
+        display: inline-block;
+        padding: 14px 16px;
+        color: white;
+        text-align: center;
+        text-decoration: unset;
+        font-size: 16 px;
+      }
+      #category-nav a:hover {
+        background-color: #d00;
+        color: black;
+      }
+      h3 {
+        margin: 0;
+        padding: 0;
+      }
+      label {
+      width: 100%;
+      display: block;
+      border: 1px solid black;
+      margin: 5px;
+      padding: 5px; /* Add padding for better appearance */
+      }
+      .message-box {
+        /*display: flex;*/
+        font-size: 20px;
+        justify-content: center;
+        align-items: center;
+        display: none;
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 10px;
+        width: 14rem;
+        height: 4rem;
+        background-color: #2222f2;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        animation: showMessage 2.5s ease-in-out forwards;
+        z-index: 2;
+      }
+      .move-to-top-right {
+        position: relative;
+        animation: moveToTopRight 2s;
+      }
+      #product-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 10px;
+      }
+      .product-img {
+          width: 10rem;
+          height: 8rem;
+      }
+      .product-card {
+          border: 2px solid #ddd;
+          border-radius: 8px;
+          margin: 10px;
+          padding: 15px;
+          width: 300px;
+          box-shadow: 0 0 10px rgb(255, 0, 149); /* Blue shadow */
+      }
+      #store-address {
+        color: gold;
+        margin: 8px 4px 2px 4px
+      }
+      #store-banner {
+        /*overflow-x: auto;*/
+        width: 40%;
+        height: 8rem;
+        border: 1px solid rgba(245, 241, 7, 0.815);
+      }
+      #store-front {
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        background-color: #222252;
+        /*height: 100vh;  Adjust as needed */
+      }
+      #store-info {
+        width: 30vw;
+        color: yellow;
+        display: flex;
+        flex-direction: column; /* This makes the child elements stack vertically */
+        gap: 5px; 
+        /*height: 100vh;  Adjust the height as needed */
+      }
+      #store-info > * {  /* Asterisk is wild card for all child*/
+        width: 100%;
+        color: gold;
+        margin: 4px 4px 4px 4px;
+        border: 1px solid rgba(245, 241, 235, 0.815);
+        /*height: 100vh;  Adjust the height as needed */
+      }
+      #store-logo {
+        /*overflow-x: auto;
+        align-self: flex-end;*/
+        vertical-align: middle;
+        margin-top: 1rem;
+        width: 6rem; 
+        height: 6rem;
+        border: 1px solid rgba(245, 241, 7, 0.815); /* Corrected the border property */
+      }
+      #store-msg-sticky {
+        color: #fff;
+        position: sticky;
+        width: 100%;
+        top: 3rem;
+        height: 1.5rem;
+        overflow: hidden;
+        white-space: nowrap;
+        background-color: #315;
+      }
+      #store-msg {
+        text-indent: 150px;
+        color: #fff;
+        display: inline-block;
+        margin: 1px 4px;
+        padding-left: 100px; /* Space between iterations */
+        animation: marquee 25s linear infinite; /* Adjust the duration as needed */
+      }
+      #store-web {
+        color: gold;
+        /*margin: 8px 4px 2px 4px;  2px gap between elements */
+      }
+      #store-wsphone {
+        color: gold; /*2px gap between elements */
+        display: block;
+      }
+      .toggleOption {
+        display: inline-block;
+        margin-bottom: 10px;
+        color: #bbf;
+        padding: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        border: 2px solid #3498db; /* Border color */
+        background: #d00;
+        border-radius: 10px; /* Rounded corners */
+        transition: background-color 0.3s, color 0.3s; /* Smooth transition on hover */
+        animation: enlargeAndMove 4s ease-in-out; /* Apply animation */
+      }
+      /*CSS to style form into 2 columns*/
+      #formContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #dateTimeForm {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 20px;
+      }
+
+      #formContainer>label,
+      #formContainer>input,
+      #formContainer>select {
+        width: 95%;
+      }
+    /*To do - style store front to vertical*/
+      @media only screen and (max-width: 500px) {
+        #store-front {
+          text-align: center;
+          /*display: block;
+          align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;flex-direction: row;
+          height: 100vh;  Adjust as needed */
+        }
+        #store-banner {
+          /*overflow-x: auto;*/
+          width: 80vw;
+          height: 8rem;
+        }
+  
+        #store-info {
+          width: 70vw;
+          gap: 3px; 
+          /*height: 100vh;  Adjust the height as needed */
+        }
+  
+        #store-logo {
+          justify-content: center;
+          align-items: center;
+          width: 6rem; 
+          height: 6rem;
+          border: 1px solid rgba(245, 241, 7, 0.815); /* Corrected the border property */
+        }
+          #category-nav {
+            width: 90%;
+          }
+      }
+      </style>
+</head>
+<body>
+    <div id="cart-icon">
+        <span id="cart-count">0</span>
+        <p id="cart-close"> X </p>
+        <span id="cart-total">$0.00</span>
+    </div>
+    <!-- Checkout Page -->
+    <button onclick='checkout()' id="checkOutBtn" style="display: none;">Check Out</button>
+    <div id="formContainer" style="display: none;">
+      <h4>Enter Date,Time & Delivery Option</h4>
+      <form id="dateTimeForm">
+        <label style="display:inline-block;" for="dateInput">Date: mm-dd-yyyy</label>
+        <input type=date id="dateInput" required>
+        <label for="hourInput">Hour: 24HR</label>
+        <select id="hourInput">
+          <option value="05">05</option>
+          <option value="06">06</option>
+          <option value="07">07</option>
+          <option value="08">08</option>
+          <option value="09">09</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+        </select>
+        <label for="minInput">Time: Mins</label>
+        <select id="minInput">
+          <option value="00">00</option>
+          <option value="05">05</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+          <option value="25">25</option>
+          <option value="30">30</option>
+          <option value="35">35</option>
+          <option value="40">40</option>
+          <option value="45">45</option>
+          <option value="50">50</option>
+          <option value="55">55</option>
+          <option value="55">55</option>//added for 55 to 59 mins
+        </select>
+        <label for="deliveryOptions">Delivery Options:</label>
+        <select id="deliveryOptions">
+          <option value="Self Pick Up">Self Pick ($0.00)</option>
+          <option value="By MeetUp Marsiling MRT">MeetUp Marsiling MRT($1.00)</option>
+          <option value="By MeetUp Woodlands MRT">MeetUp Woodlands MRT($1.80)</option>
+          <option value="Deliver To Home">Deliver To Home (> $2.00)</option>
+        </select>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <div id="cart">
+      <!-- Cart details will be displayed here using JavaScript -->
+    </div>
+    
+    <div id="store-front">
+      
+    </div>
+    <nav id="category-nav">
+        <!-- Navigation tabs dynamically created from category values -->
+    </nav>
+    <div id="store-msg-sticky">
+      <p id="store-msg">
+      <span>This is text that will be placed</span>
+      </p>
+    </div>
+    <div id="product-container">
+        <!-- Product cards dynamically created here -->
+    </div>
+    <div class="message-box">Tap the cart icon <br>to view order
+    </div>
+    <script>
+    const stores = [
+        { "StoreId": "Store01",
+        "StoreUnique": "WLR330HomeMadeDishes",
+        "StoreName": "Home Made Dishes",
+        "StoreAddress": "330 Woodlands Road, Singapore",
+        "LogoImg": "images/logo1.jpg",
+        "StoreBannerImg": "images/StoreBanner4.jpg",
+        "StoreWebsite": "www.homemadedishes.com",
+        "GeoLocation":{"Lat": 1.4322294525406019, "Lon": 103.77419238281311},
+        "StorePhone": "+6597358539",
+        "PromotionMessage": "Welcome to Home Made Dishes, where we serve the best food we would eat! Try our signature Bing Burger, made with 100% beef patty, cheese, lettuce, tomato, onion, and our Special sauce. Or choose from our variety of other burgers, salads, sandwiches, and sides. Don't forget to add a drink and a Dessert to complete your meal. For a limited time, enjoy our Promotion of 10% off any burger combo. Hurry, this offer won't last long!",
+        "Categories": ["All", "Lunch", "Dinner", "Promotion", "Special"],
+        "Products": [
+        { "Id": "AA01",
+            "ProductName": "Bing Burger",
+            "ProductImg" : "images/AA01.jpg",
+            "Description": "Our signature burger, made with 100% beef patty, cheese, lettuce, tomato, onion, and our Special sauce. Served with fries and a drink of your choice.",
+            "Categories": ["All", "Lunch", "Dinner", "Promotion"],
+            "Price": 6.00,
+            "Options": {
+            "Dessert": [{ "No Thanks": 0.00,"ChengDo": 2.00 ,  "BoBo ChaCha": 3.20 } ], 
+            "AddOn": [{ "No Thanks": 0.00,  "Seafood Toufu": 2.00 ,  "Fish Cake": 3.20 , "Fruit Rojak": 2.10 ,  "Poach Egg": 1.20 }],
+            "Drink": [{ "Plain Water": 0.00 , "Mango Juice": 4.00, "Lime Juice": 0.50, "CokeZero 250mL": 0.50}]
+            },
+            "Diet": ["HighProtein"]
+        },
+        {"Id": "AA02",
+            "ProductName": "Veggie Burger",
+            "ProductImg" : "images/AA02.jpg",
+            "Description": "A delicious Vegetarian option, made with a soy-based patty, cheese, lettuce, tomato, onion, and our Special sauce. Served with fries and a drink of your choice.",
+            "Categories": ["All", "Lunch", "Dinner", "Special"],
+            "Price": 6.90,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00, "Mango Juice": 4.00, "Lime Juice": 0.50, "CokeZero 250mL": 0.50}],          
+            "Dessert": [{"No Thanks": 0.00,"ChengDo": 2.00, "BoBo ChaCha": 3.20}],
+            "AddOn": [{ "Two Wings": 0.00, "Seafood Toufu": 2.00, "Fish Cake": 3.20, "Fruit Rojak": 2.10, "Poach Egg": 1.20}]
+            },
+            "Diet": ["Vegetarian", "LowCarbo/Sugar"]
+        },
+        {"Id": "AA03",
+            "ProductName": "Fish Squid Combo",
+            "ProductImg" : "images/AA03.jpg",
+            "Description": "A juicy chicken patty, cheese, lettuce, tomato, onion, and our Special sauce. Served with fries and a drink of your choice.",
+            "Categories": ["All", "Lunch", "Dinner"],
+            "Price": 4.50,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00, "Mango Juice": 4.00, "Lime Juice": 0.50, "CokeZero 250mL": 0.50}],
+            "Dessert": [{"No Thanks": 0.00,"ChengDo": 2.00, "BoBo ChaCha": 3.20}],
+            "AddOn": [{"No Thanks": 0.00, "Seafood Toufu": 2.00, "Fish Cake": 3.20, "Fruit Rojak": 2.10, "Poach Egg": 1.20}]
+            },
+            "Diet": ["HighProtein"]
+        },
+        {"Id": "AA04",
+            "ProductName": "Pizza",
+            "ProductImg" : "images/AA04.jpg",
+            "Description": "A crispy fish fillet, cheese, lettuce, tomato, onion, and our Special sauce. Served with fries and a drink of your choice.",
+            "Categories": ["All", "Lunch", "Dinner"],
+            "Price": 3.90,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}],
+            "Dessert": [{"No Thanks": 0.00,"ChengDo": 2.00,"BoBo ChaCha": 3.20}],
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
+            },
+            "Diet": ["LowCarbo/Sugar"]
+        },
+        {"Id": "AA05",
+            "ProductName": "Cheeseburger",
+            "ProductImg" : "images/AA05.jpg",
+            "Description": "A classic burger, made with 100% beef patty, double cheese, lettuce, tomato, onion, and our Special sauce. Served with fries and a drink of your choice.",
+            "Categories": ["All", "Lunch", "Dinner"],
+            "Price": 6.00,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}],
+            "Dessert": [{"No Thanks": 0.00,"ChengDo": 2.00,"BoBo ChaCha": 3.20}],
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
+            },
+            "Diet": ["HighProtein"]
+        },
+        {"Id": "AA06",
+            "ProductName": "Bacon Burger",
+            "ProductImg" : "images/AA06.jpg",
+            "Description": "A mouthwatering burger, made with 100% beef patty, bacon, cheese, lettuce, tomato, onion, and our Special sauce. Served with fries and a drink of your choice.",
+            "Categories": ["All", "Lunch", "Dinner", "Special"],
+            "Price": 6.10,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}],
+            "Dessert": [{"No Thanks": 0.00,"ChengDo": 2.00,"BoBo ChaCha": 3.20}],
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
+            },
+            "Diet": ["HighProtein"]
+        },
+        {"Id": "AA07",
+            "ProductName": "Mushroom Burger",
+            "ProductImg" : "images/AA07.jpg",
+            "Description": "A savory burger, made with 100% beef patty, mushroom, cheese, lettuce, tomato, onion, and our Special sauce. Served with fries and a drink of your choice.",
+            "Categories": ["All", "Lunch", "Dinner"],
+            "Price": 6.20,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}], 
+            "Dessert": [{"No Thanks": 0.00,"ChengDo": 2.00,"BoBo ChaCha": 3.20}],
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
+            },
+            "Diet": ["LowCarbo/Sugar"]
+        },
+        {"Id": "AA08",
+            "ProductName": "Salad",
+            "ProductImg" : "images/AA08.jpg",
+            "Description": "A fresh and healthy salad, made with lettuce, tomato, cucumber, carrot, cheese, and your choice of dressing. Served with a drink of your choice.",
+            "Categories": ["All", "Breakfast", "Lunch", "Dinner", "Special"],
+            "Price": 6.40,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}], 
+            "Dressing": [{"No Thanks": 0.00,"Dressing2": 0.50,"Dressing3": 0.50,"Dressing4": 0.50}], 
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
+            },
+            "Diet": ["Vegetarian", "LowCarbo/Sugar"]
+        },
+        {"Id": "AA09",
+            "ProductName": "Burger Combo Meal",
+            "ProductImg" : "images/AA09.jpg",
+            "Description": "A tasty burger, made with your choice of Bread, meat, cheese, and Vegetables. Served with fries and a drink of your choice.",
+            "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
+            "Price": 4.20,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}],
+            "Bread": [{"No Thanks": 0.00,"Italian": 0.50,"Oat": 0.50,"Grain 100%": 0.50}],
+            "Meat": [{"No Thanks": 0.00,"Chicken Nuggets": 1.00,"Fried Fish Fillet": 1.00,"Mutton Cubes": 1.00}],
+            "Cheese": [{"No Thanks": 0.00,"Mozerella": 0.50,"Parmesan": 0.50,"Cheddar": 0.50}],
+            "Vegetables": [{"No Thanks": 0.00,"Garden Greens": 0.00,"Lettuce & Kale": 0.00,"Caesar Sald": 0.00}], 
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
+            },
+            "Diet": ["HighProtein"]
+        },
+        {"Id": "AA10",
+            "ProductName": "Wrap",
+            "ProductImg" : "images/AA10.jpg",
+            "Description": "A delicious wrap, made with your choice of tortilla, meat, cheese, and Vegetables. Served with fries and a drink of your choice.",
+            "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
+            "Price": 4.35,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}],
+            "Tortilla": [{"Tortilla1": 0.00,"Tortilla2": 0.50,"Tortilla3": 0.50,"Tortilla4": 0.50}],
+            "Meat": [{"No Thanks": 0.00,"Chicken Nuggets": 1.00,"Fried Fish Fillet": 1.00,"Mutton Cubes": 1.00}],
+            "Cheese": [{"No Thanks": 0.00,"Mozerella": 0.50,"Parmesan": 0.50,"Cheddar": 0.50}],
+            "Vegetables": [{"No Thanks": 0.00,"Garden Greens": 0.00,"Lettuce & Kale": 0.00,"Caesar Sald": 0.00}],
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
+            },
+            "Diet": ["HighProtein"]
+        }
+        ],
+        "OperationHours": {
+        "weekday": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "startTime": "8:00 AM",
+        "endTime": "10:00 PM"
+        }
+    },
+    {"StoreId": "Store02",
+        "StoreUnique": "WLS302HomeMadeDFood",
+        "StoreName": "Home Made Food",
+        "StoreAddress": "302 Woodlands St31, Singapore",
+        "LogoImg": "images/logo2.jpg",
+        "StoreBannerImg": "images/StoreBanner4.jpg",
+        "StoreWebsite": "www.homemadefood.com",
+        "GeoLocation":{"Lat": 1.387353973, "Lon": 103.8064571},
+        "StorePhone": "+6591518277",
+        "PromotionMessage": "All items at 50% discount while stock last. Welcome to Home Made Food, where we serve the best food that we love to eat! Try our creation of maki roll with our variety of fillings. Don't forget to add a side, and a drink to complete your meal. For a limited time, enjoy our Promotion of buy one get one free on any pizza. Hurry, this offer won't last long!",
+        "Categories": ["All", "Featured", "Promotion", "Special"],
+        "Products": [
+        {"Id": "BB01",
+            "ProductName": "Special Maki Roll",
+            "ProductImg" : "images/BB01.jpg",
+            "Description": "Specially created for Singaporean taste bud. You will want more! Filled with chili spicy Japanese Mayo, tuna, chicken floss, cucumber, carrot.",
+            "Categories": ["All", "Featured", "Special"],
+            "Price": 3.00,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"Coke Zero 250mL": 1.00}],
+            "Size": [{"Small": 0.00,"Medium": 4.00,"Large": 6.00}],
+            "Dessert": [{"No Thanks": 0.00, "Coconut Pudding": 2.00, "BoBo ChaCha": 2.40}],
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Fried Egg": 0.80}]
+            },
+            "Diet": ["LowCarbo/Sugar"]
+        },
+        {"Id": "BB02",
+            "ProductName": "Healthy Maki Roll",
+            "ProductImg" : "images/BB02.jpg",
+            "Description": "Lesser rice more vegetable. Fill with Egg Mayo, cucumber, carrot, cheese, and kang kong. Option to be served with a drink of your choice.",
+            "Categories": ["All", "Featured", "Special"],
+            "Price": 3.20,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Milk Juice": 2.80,"Lime Juice": 1.00,"Coke Zero 250mL": 1.00}],
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 1.80,"Fruit Rojak": 2.10,"Fried Egg": 1.00}]
+            },
+            "Diet": ["Vegetarian", "LowCarbo/Sugar"]
+        },
+        {"Id": "BB03",
+            "ProductName": "Bak Kwa Sandwich",
+            "ProductImg" : "images/BB03.jpg",
+            "Description": "A tasty sandwich, with Bak Kwa meat, lettuce and cucumber. Option to add cheese to your sandwich and cheaper drink of your choice.",
+            "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
+            "Price": 6.30,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.80,"Lime Juice": 1.00,"Coke Zero 250mL": 1.500}],
+            "Meat": [{"No Thanks": 0.00,"Chicken Nuggets 4pcs": 2.00,"Fried Fish Fillet": 1.00,"Hard Bolied Egg": 0.80}],
+            "Cheese": [{"No Thanks": 0.00,"Mozerella": 1.80,"Cheddar": 1.80}],
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu 2pcs": 2.00,"Fish Cake": 1.80,"Fruit Rojak": 2.40,"Hard Bolied Egg": 0.80}]
+            },
+            "Diet": ["HighProtein"]
+        },
+        {"Id": "BB04",
+            "ProductName": "Double Hot Dog",
+            "ProductImg" : "images/BB04.jpg",
+            "Description": "Two tasty hot dog, with chicken sausage, lettuce and tomato. Option to add cheese to your hot dog and cheaper drink of your choice.",
+            "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
+            "Price": 3.20,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.50,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}],
+            "Bread": [{"No Thanks": 0.00,"Italian": 0.50,"Oat": 0.50,"Grain 100%": 0.50}],
+            "Meat": [{"No Thanks": 0.00,"Chicken Nuggets 4pcs": 1.00,"Fried Fish Fillet": 1.00,"Hard Bolied Egg": 1.00}],
+            "Cheese": [{"No Thanks": 0.00,"Egg Mayonaise": 0.60,"Mozerella": 1.80,"Cheddar": 1.80}],
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 1.80,"Fruit Rojak": 2.10,"Fried Egg": 1.00}]
+            },
+            "Diet": ["HighProtein"]
+        },
+        {"Id": "BB05",
+            "ProductName": "Wrap",
+            "ProductImg" : "images/BB05.jpg",
+            "Description": "A delicious wrap, made with chili spicy Japanese Mayo, tuna, chicken floss, cucumber",
+            "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
+            "Price": 5.40,
+            "Options": {
+            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.00,"Lime Juice": 1.50,"Coke Zero 250mL": 0.50}],
+            "Tortilla": [{"Tortilla1": 0.00,"Tortilla2": 0.50,"Tortilla3": 0.50,"Tortilla4": 0.50}],
+            "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
+            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
+            "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Hard Bolied Egg": 0.80 } ] 
+            },
+            "Diet": ["LowCarbo/Sugar"]
+        }
+        ],
+        "OperationHours": {
+        "weekday": "Monday to Sunday",
+        "startTime": "8:00 AM",
+        "endTime": "10:00 PM"
+        }
+    },
+    { "StoreId": "LionCityArtGallery",
+        "StoreUnique": "LionCityArtGalleryTGM01",
+        "StoreName": "Lion City Art Gallery",
+        "StoreAddress": "2 Orchard, Singapore",
+        "LogoImg": "images/Logo6.jpg",
+        "StoreBannerImg": "images/StoreBanner3.jpg",
+        "StoreWebsite": "www.lion-city-art-gallery.com",
+        "GeoLocation":{"Lat": 1.387353973, "Lon": 103.8064571},
+        "StorePhone": "+65 90011383",
+        "PromotionMessage": "Welcome to Lion City Art Gallery Singapore, where we curated special peices of arts for you. Quote 'LCAG-Jun' to get 10% discount. Hurry, this offer won't last long!",
+        "Categories": ["All", "Abstract", "Oil Paint", "Promotion", "Photography", "Modern"],
+        "Products": [
+        {"Id": "Art001",
+            "ProductName": "Koi In Pond- Blue Sky Reflection",
+            "ProductImg" : "images/Art1.jpg",
+            "Description": "Done by local artist <Name>. <name> has been in the art scene for 15 years. She is .......",
+            "Categories": ["All", "Modern", "Promotion"],
+            "Price": 555.50,
+            "Options": {
+            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 80.00 , "Classical Frame": 120 } ], 
+            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 33 } ]
+            },
+            "Classification": ["Contemporary"]
+        },
+        {"Id": "Art002",
+            "ProductName": "Imagine Flowers",
+            "ProductImg" : "images/Art2.jpg",
+            "Description": "Done by local artist <Name>. <name> has been in the art scene for 15 years. She is .......",
+            "Categories": ["All", "Abstract"],
+            "Price": 800.00,
+            "Options": {
+            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 80.00 , "Classical Frame": 120 } ], 
+            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 33 } ]
+            }, 
+            "Classification": ["Modern"] 
+        },
+        {"Id": "Art003", 
+            "ProductName": "Graceful White Pigeon on Tree Branches",
+            "ProductImg" : "images/Art3.jpg",
+            "Description": "Done by Chinese (HangZhou) artist <Name>. This piece was inspired by the beautiful... <name> has been in the art scene for 15 years. He is ........",
+            "Categories": ["All", "Oil Paint"],
+            "Price": 355.55,
+            "Options": {
+            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 80.00 , "Classical Frame": 120 } ], 
+            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 30 } ]
+            }, 
+            "Classification": ["Modern"] 
+        },
+        {
+            "Id": "Art004",
+            "ProductName": "Poster - Start the Day Smiling",
+            "ProductImg" : "images/Art4.jpg",
+            "Description": "Waking to a nice poster greeting you with beautiful monring scene. A great way to start your day",
+            "Categories": ["All", "Photography"],
+            "Price": 25.00,
+            "Options": {
+            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 80.00 , "Classical Frame": 120 } ], 
+            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 30 } ]
+            }, 
+            "Classification": ["Modern"] 
+        },
+        {"Id": "Art005",
+            "ProductName": "Poster - Motivational Start Now",
+            "ProductImg" : "images/Art5.jpg",
+            "Description": "Get yourself a kick start and perk up for your new journey in life",
+            "Categories": ["All", "Photography", "Promotion"],
+            "Price": 15.00,
+            "Options": {
+            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 80.00 , "Classical Frame": 120 } ], 
+            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 33 } ]
+            }, 
+            "Classification": ["Modern"] 
+        },
+        {"Id": "Art006",
+            "ProductName": "Cheesy Sandwich",
+            "ProductImg" : "images/Art6.jpg",
+            "Description": "A delicious image of your product. Excite your customer's hunger pang with this amazing provocation",
+            "Categories": ["All", "Photography"],
+            "Price": 15.70,
+            "Options": {
+            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 50.00 , "Classical Frame": 60 } ], 
+            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 33 } ]
+            }, 
+            "Classification": ["Modern"]
+        }
+        ],
+    "OperationHours": {
+      "weekday": "Monday to Sunday",
+      "startTime": "8:00 AM",
+      "endTime": "10:00 PM"
+    }
+  },
+  {"StoreId": "ABC123",
+    "StoreUnique": "Sr789EastWestFusion",
+    "StoreName": "East West Fusion",
+    "StoreAddress": "789 Scotts Road, Far East Shopping Plaza, Singapore 123456",
+    "LogoImg": "images/logo4.jpg",
+    "StoreBannerImg": "images/StoreBanner4.jpg",
+    "StoreWebsite": "www.bingspizza.com",
+    "GeoLocation":{"Lat": 1.387353973, "Lon": 103.8064571},
+    "StorePhone": "+6592299338",
+    "PromotionMessage": "Welcome to East West Fusion, where we serve the best food in town! Try our classic Margherita Baguette, made with tomato sauce, mozzarella cheese, and basil. Or choose from our variety of other pizzas, pastas, salads, and sides. Don't forget to add a drink and a Dessert to complete your meal. For a limited time, enjoy our Promotion of buy one get one free on any pizza. Hurry, this offer won't last long!",
+    "Categories": ["All", "Lunch", "Dinner", "Promotion", "Special"],
+    "Products": [
+      {"Id": "DD41",
+        "ProductName": "Margherita Baguette",
+        "ProductImg" : "images/DD41.jpg",
+        "Description": "Our classic Baguette, made with tomato sauce, mozzarella cheese, and basil. Served with a drink of your choice.",
+        "Categories": ["All", "Lunch", "Dinner", "Promotion"],
+        "Price": 5.80,
+        "Options": {
+          "Drink": [ { "No Thanks": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
+          "Size": [ { "Small": 0.00 , "Medium": 5.00 , "Large": 7.00 } ],
+          "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+        },
+        "Diet": ["HighProtein"]
+       },
+       {"Id": "DD42",
+        "ProductName": "Wrap",
+        "ProductImg" : "images/DD42-ChickenWrap.webp",
+        "Description": "A delicious wrap, made with your choice of tortilla, meat, cheese, and Vegetables. Served with fries and a drink of your choice.",
+        "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
+        "Price": 5.85,
+        "Options": {
+         "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
+         "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+          "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
+          "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+        },
+        "Diet": ["HighProtein"]
+      },
+      {
+        "Id": "DD43",
+        "ProductName": "Classic Pancakes",
+        "ProductImg" : "images/DD43.jpg",
+        "Description": "Delicious fluffy pancakes served with maple syrup.",
+        "Price": 5.90,
+        "Options": {
+          "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
+          "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+          "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
+          "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 0.50 , "Lettuce & Kale": 0.50 , "Caesar Sald": 0.50 } ],
+           "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+         },
+        "Categories": ["Breakfast"]
+      },
+      {
+        "Id": "DD44",
+        "ProductName": "Chicken Caesar Salad",
+        "ProductImg" : "images/DD44.jpg",
+        "Description": "Fresh romaine lettuce topped with grilled chicken and Caesar dressing.",
+        "Price": 8.88,
+        "Options": {
+          "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
+          "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
+          "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 0.50 , "Lettuce & Kale": 0.50 , "Caesar Sald": 0.50 } ],
+           "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+         },
+        "Categories": ["Lunch"]
+      },
+      {
+        "Id": "DD45",
+        "ProductName": "Special Dessert Platter",
+        "ProductImg" : "images/DD45.jpg",
+        "Description": "A delightful assortment of Desserts for sharing.",
+        "Price": 6.12,
+        "Options": {
+          "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
+           "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
+          "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
+          "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 1.00 , "Lettuce & Kale": 0.50 , "Caesar Sald": 0.50 } ],
+           "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+         },
+        "Categories": ["Special", "Dinner"]
+      },
+      {
+          "Id": "DD46",
+          "ProductName": "Avocado Toast",
+          "ProductImg" : "images/DD46.jpg",
+          "Description": "Sliced avocados on toasted whole-grain Bread.",
+          "Price": 6.15,
+          "Options": {
+            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
+            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+             "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
+             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+           },
+          "Categories": ["Breakfast"]
+        },
+        {
+          "Id": "DD47",
+          "ProductName": "Chicken Pesto Panini",
+          "ProductImg" : "images/DD47.jpg",
+          "Description": "Grilled chicken, pesto sauce, and mozzarella on ciabatta.",
+          "Price": 6.22,
+          "Options": {
+            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
+             "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
+            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
+             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+           },
+          "Categories": ["Lunch"]
+        },
+        {
+          "Id": "DD48",
+          "ProductName": "Spaghetti Bolognese",
+          "ProductImg" : "images/DD48.jpg",
+          "Description": "Classic Italian pasta with hearty meat sauce.",
+          "Price": 6.23,
+          "Options": {
+            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
+            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+             "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
+             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+           },
+          "Categories": ["Dinner"]
+        },
+        {
+          "Id": "DD49",
+          "ProductName": "Fruit Smoothie",
+          "ProductImg" : "images/DD49.jpg",
+          "Description": "Refreshing mixed fruit smoothie for a limited time!",
+          "Price": 6.24,
+          "Options": {
+            "Snack": [ { "No Thanks": 0.00 , "Muah Chee": 4.00 , "Satay5 Sticks": 2.50 , "Peanut Toast": 1.00 } ],
+            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 1.00 , "Parmesan": 1.50 , "Cheddar": 0.50 } ],
+            "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 0.50 , "Lettuce & Kale": 0.50 , "Caesar Salad": 0.50 }]
+           },
+          "Categories": ["Promotion", "Lunch"]
+        },
+        {
+          "Id": "DD50",
+          "ProductName": "Chef's Special Steak",
+          "ProductImg" : "images/DD50.jpg",
+          "Description": "Prime ribeye steak with chef's secret seasoning.",
+          "Price": 6.26,
+          "Options": {
+            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
+            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+            "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 0.50 , "Lettuce & Kale": 0.50 , "Caesar Salad": 0.50 } ],
+             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+           },
+          "Categories": ["Special", "Dinner"]
+        },
+        {
+          "Id": "DD51",
+          "ProductName": "Durian Cake",
+          "ProductImg" : "images/DD51.jpg",
+          "Description": "Indulgent durian cake with creamy Mao San Wang.",
+          "Price": 6.28,
+          "Options": {
+            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "CokeZero 250mL": 1.00 } ],
+            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+           },
+          "Categories": ["Special", "Dinner"]
+        },
+        {
+          "Id": "DD52",
+          "ProductName": "Chocolate Lava Cake",
+          "ProductImg" : "images/DD52.jpg",
+          "Description": "Indulgent chocolate cake with a gooey molten center.",
+          "Price": 6.34,
+          "Options": {
+            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "CokeZero 250mL": 1.00 } ],
+            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+           },
+          "Categories": ["Special", "Dessert"]
+        },
+      {
+      "Id": "DD53",
+      "ProductName": "Greek Yogurt Parfait",
+      "ProductImg" : "images/DD53.jpg",
+      "Description": "Layers of Greek yogurt, granola, and fresh berries.",
+      "Price": 5.36,
+      "Options": {
+        "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
+        "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+         "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+       },
+      "Categories": ["Breakfast", "Vegetarian"]
+      },
+      {
+          "Id": "DD54",
+          "ProductName": "Shrimp Laksa",
+          "ProductImg" : "images/DD54.jpg",
+          "Description": "Pigeon eggs, fresh shrimps, and basil with coconut milk.",
+          "Price": 4.37,
+          "Options": {
+            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "CokeZero 250mL": 1.00 } ],
+            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+           },
+          "Categories": ["Lunch", "Vegetarian"]
+      },
+      {
+          "Id": "DD55",
+          "ProductName": "Shrimp Scampi Pasta",
+          "ProductImg" : "images/DD55.jpg",
+          "Description": "Linguine with succulent shrimp in a garlic and lemon sauce.",
+          "Price": 4.61,
+          "Options": {
+            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "CokeZero 250mL": 1.00 } ],
+             "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
+            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
+             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+           },
+          "Categories": ["Dinner", "Seafood"]
+      },
+      {
+          "Id": "DD56",
+          "ProductName": "Mango Tango Smoothie",
+          "ProductImg" : "images/DD56.jpg",
+          "Description": "Tropical blend of mango, pineapple, and coconut milk.",
+          "Price": 4.64,
+          "Options": {
+            "Snack": [ { "No Thanks": 0.00 , "Muah Chee": 4.00 , "Satay5 Sticks": 2.50 , "Peanut Toast": 1.00 } ],
+            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 1.00 , "Parmesan": 1.50 , "Cheddar": 0.50 } ],
+            "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 0.50 , "Lettuce & Kale": 0.50 , "Caesar Salad": 0.50 }]
+           },
+          "Categories": ["Promotion", "Beverage"]
+      },
+      {
+          "Id": "DD57",
+          "ProductName": "Vegetarian Quinoa Bowl",
+          "ProductImg" : "images/DD57.jpg",
+          "Description": "Quinoa, roasted Vegetables, and tahini dressing.",
+          "Price": 4.67,
+          "Options": {
+            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "CokeZero 250mL": 0.50 } ],
+            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
+             "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
+            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 1.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
+            "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
+           },
+          "Categories": ["Special", "Vegetarian"]
+      }
+      ],
+    "OperationHours": {
+      "weekday": "Monday to Sunday",
+      "startTime": "8:00 AM",
+      "endTime": "10:00 PM"
+     }
+  }
+]   
+    const AMKLat = 1.3692189152416219;
+    const AMKLon = 103.85013933048792;
+    //localStorage.removeItem('storeidcurr+cart');
+    let store= null;
+    //navigate based on url query like index.html?StoreID=AB1234&ProductID=DD57
+    const urlParams = new URLSearchParams(window.location.search);
+    try {
+      //const urlParams = new URLSearchParams(window.location.search);
+      const storeIdPara = urlParams.get('StoreID');
+      //console.log(storeIdPara);
+      //const productIds = urlParams.get('ProductID').split(',');//in case of ProductID=A12,B23,C34
+      // Check if StoreID parameters is present
+      if (!storeIdPara) {
+        throw new Error('Missing StoreID in URL');
+      }
+      // Find the store object
+      store = stores.find(store => store.StoreId === storeIdPara);
+      if (!store) {
+        throw new Error('Store with ID ' + storeId + ' not found');
+      }
+    } catch (error) {
+      // Handle error gracefully
+      //alert('Error: ' + error.message);
+      store = stores[0];//if no StoreID, then serve default first store
+    }
+    const storeIDCurr=store.StoreId;//current store ID
+    console.log(haverDist(store.GeoLocation.Lat,store.GeoLocation.Lon,AMKLat,AMKLon));
+    //console.log(storeIDCurr);
+    const products=store.Products;
+    const storeFront = document.getElementById("store-front"); 
+    const cartTotalEle = document.getElementById("cart-total"); 
+    const cartCountEle = document.getElementById("cart-count");
+    const storeMsgEle = document.getElementById("store-msg"); 
+    storeFront.innerHTML=`<img src="${store.StoreBannerImg}" id="store-banner">
+      <div id="store-info">
+        <a href="${store.StoreWebsite}" id="store-web">${store.StoreWebsite}</a>
+        <a href="https://wa.me/${store.StorePhone}" id="store-wsphone">Contact us on WhatsApp</a>
+        <span id="store-address"> ${store.StoreAddress}</span>
+        <span id="store-address"> ${store.StoreUnique}</span>
+      </div>  
+      <img src="${store.LogoImg}" id="store-logo"> `
+    //get store messages
+    storeMsgEle.innerHTML = store.PromotionMessage;
+    //cart icon click event
+    document.getElementById('cart-icon').addEventListener('click', function() {
+      var cart = document.getElementById('cart'); 
+      var checkOutEle=document.getElementById("checkOutBtn");
+      var cartClose=  document.getElementById('cart-close');   
+      if (cart.style.display === 'none') {
+        cart.style.display = 'block';
+        cartClose.style.display = 'block';
+        checkOutEle.style.display='block';
+        window.scrollTo(0, 0);
+        } else {
+          cart.style.display = 'none';
+          cartClose.style.display = 'none'
+          checkOutEle.style.display='none';
+          //displayCartDetails();
+          window.scrollTo(0, 0);
+        } 
+    });
+    var cart = JSON.parse(localStorage.getItem(storeIDCurr+"Cart")) || [];
+    if (cart.length>0.1){
+      displayCartDetails();
+    }
+    //console.log(cart);
+    //localStorage.removeItem('cart');
+    // Function to add product to the cart
+    function addToCart(productId) {
+      var selectedOptions = document.querySelectorAll(`.option-radio:checked`);
+      var product = products.find(p => p.Id === productId);
+      var totalPrice = product.Price;
+      // Create an array to store selected options
+      var selectedOptionsArray = [];
+      // Iterate through selected radio buttons and add their details
+      selectedOptions.forEach(option => {
+        selectedOptionsArray.push({
+          type: option.getAttribute("data-type"),
+          name: option.getAttribute("data-name"),
+          price: parseFloat(option.getAttribute("data-price"))
+        });
+        // Add the price to the total
+        totalPrice += parseFloat(option.getAttribute("data-price"));
+      });
+
+      // Create or update cart data in local storage
+      var cart = JSON.parse(localStorage.getItem(storeIDCurr+"Cart")) || [];
+      cart.push({ product, quantity: 1, totalPrice, selectedOptions: selectedOptionsArray });
+      //console.log(cartText);
+      localStorage.setItem(storeIDCurr+"Cart", JSON.stringify(cart));
+      toggleOption(productId,"none");
+      // Display updated cart details
+      displayCartDetails();
+      //window.scrollTo(0, 0);
+      /*const button = document.querySelector(".add2Cart");
+      const messageBox = document.querySelector(".message-box");
+      const buttonWidth = button.offsetWidth;// Store original button dimensions
+      const buttonHeight = button.offsetHeight;
+      button.classList.add("moving");// Add the `moving` class for animation
+      // Set button width variable for animation
+      document.documentElement.style.setProperty("--button-width", `${buttonWidth}px`);
+      messageBox.style.display = "block";
+      setTimeout(() => { // Show message box after animation ends
+        button.classList.remove("moving");
+        messageBox.style.display = "none";
+      }, 2000);*/
+    }
+    // Function to display cart details
+    function displayCartDetails() {
+      //document.getElementById("checkOutBtn").style.display='block';
+      var cartDiv = document.getElementById("cart");
+      var cart = JSON.parse(localStorage.getItem(storeIDCurr+"Cart")) || [];
+      //var cartProducts = cart[2];
+      var grandTotal = 0;
+      var cartCount = 0;
+      cartDiv.innerHTML = "<h2>"+store.StoreUnique+"</h2>"
+      cartDiv.innerHTML += `<h3 id="cart-grand-total">Grand Total:  $</h3>
+          `;
+      console.log(cart);
+      // Loop through cart items and display details
+      cart.forEach((item, index) => {
+        cartDiv.innerHTML += `
+          <div class="ordered">
+            <p>${item.product.Id}>${item.product.ProductName} - Quantity: ${item.quantity}</p>
+            <p>Total Price: $${item.totalPrice.toFixed(2)}</p>
+            <p>Product Price: $${item.product.Price.toFixed(2)}</p>
+            <p>Selected Options:</p>
+            <ul>
+              ${displaySelectedOptions(item.selectedOptions)}
+            </ul>
+            <button onclick="updateQuantity(${index}, 'increase')">+</button>
+            <button onclick="updateQuantity(${index}, 'decrease')">&ndash;</button>
+            <button onclick="deleteItem(${index})">Delete</button>
+          </div>
+        `;
+        grandTotal += item.totalPrice;
+        cartCount += item.quantity;
+        //console.log(item.quantity);
+      });
+      let grandElem=document.getElementById("cart-grand-total");
+      grandElem.innerHTML += grandTotal.toFixed(2);
+      cartTotalEle.innerHTML = grandTotal.toFixed(2);
+      cartCountEle.innerHTML = cartCount; 
+    }
+    //function to checkout
+    function checkout() {
+      //get time and delivery options
+      if (parseInt(cartCountEle.textContent)<0.1){
+          alert("No items in your cart");
+          return;
+      } 
+      document.getElementById("formContainer").style.display = "block";
+      var hourEle=document.getElementById("hourInput");
+      var minEle=document.getElementById("minInput");
+      var now = new Date();
+      var currHour=now.getHours()-5;
+      if (currHour<0){
+        currHour=0;
+      };
+      var currMin=Math.ceil(now.getMinutes()/5);
+      hourEle.selectedIndex=currHour;
+      minEle.selectedIndex=currMin;
+      document.getElementById("dateTimeForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+        var message ="";
+        var dateValue = document.getElementById("dateInput").value;
+        var hourValue = hourEle.value;
+        var minValue = minEle.value;
+        var delivery = document.getElementById("deliveryOptions").value;
+        console.log("Cur hr="+hourValue+"cur min="+minEle.value);
+        var selectedDate = new Date(dateValue);    
+        var timeRequired = {
+          "date": dateValue,
+          "time": hourValue+minValue,
+          "delivery": delivery
+        };
+        console.log(timeRequired);
+        //close user input
+        document.getElementById("formContainer").style.display = "none";
+        // prepare whatsapp message
+        console.log(parseInt(cartCountEle.textContent));
+        if (parseInt(cartCountEle.textContent)>0.9){
+         /* alert("No items in your cart");
+        } else {*/
+          let order="I am ordering -"+getOrderCode()+"\n from ";
+          // Get the "cart" element
+          var cartElement = document.getElementById("cart");
+          console.log(cartElement);
+          // Function to extract text from an element and its children
+          function getTextContent(element) {
+            let text = "";
+            for (const child of element.childNodes) {
+              //console.log("child.nodeType= "+child.nodeType +"; Node.TEXT_NODE= "+Node.TEXT_NODE+" ;child.nodeName= "+child.nodeName);
+              if (child.nodeType === Node.TEXT_NODE) {
+                //console.log(child.textContent)
+                text += child.textContent.trim();//+"%0A"; //replace(/\s+/g, " ").trim();
+              } else if (child.nodeName.toLowerCase() !== "button") {
+                text += getTextContent(child) + "\n";
+              }
+            }
+            return text;
+          }
+          // Get order code and combine with text from the cart element
+          const cartText = order+getTextContent(cartElement);
+          // Create prompt message with line breaks added
+          message+=cartText.replace(/\s+/g, " ").trim(); // Remove unnecessary whitespace
+          message+="\n Required on "+timeRequired.date+" at "+timeRequired.time+ "Hr Delivery: "+timeRequired.delivery
+          // Construct the pre-built WhatsApp link with the encoded message
+          const encodedMessage = encodeURIComponent(message);
+          const whatsappLink = `https://wa.me/${store.StorePhone}?text=${encodedMessage}`;
+          // Open the link using window.location.href in the same tab
+          //window.location.href = whatsappLink;  
+          // Open the link in a new tab using window.open()
+          window.open(whatsappLink, "_blank")
+          // remove item in localStorage and cart element
+          localStorage.removeItem(storeIDCurr+'Cart');
+          const orderedElements = document.querySelectorAll('.ordered');
+          orderedElements.forEach((element) => {
+            element.remove();
+          });
+          cartCountEle.innerHTML="0";
+          cartTotalEle.innerHTML="0";
+          let grandElem=document.getElementById("cart-grand-total");
+          grandElem.innerHTML="$0";
+        } //end whatsapp check out
+        document.getElementById("checkOutBtn").style.display = "none";
+        document.getElementById("cart").style.display = "none";
+        document.getElementById("cart-close").style.display = "none";
+      });
+      /*display prompt for user to custom input time
+      document.getElementById("timeInput").addEventListener("change", function() {
+        var userTimeInput = document.getElementById("userTimeInput");
+        if (this.value === "userSelect") {
+          userTimeInput.style.display = "inline";
+          userTimeInput.required = true;
+        } else {
+          userTimeInput.style.display = "none";
+          userTimeInput.required = false;
+        }
+      });*/
+      
+    }
+  
+    // Function to display selected options in the cart
+    function displaySelectedOptions(selectedOptions) {
+      var selectedOptionsHTML = "";
+
+      // Check if selectedOptions is an array and has items
+      if (selectedOptions && selectedOptions.length) {
+        selectedOptions.forEach(option => {
+          selectedOptionsHTML += `<li>${option.type} - ${option.name} ($${option.price.toFixed(2)})</li>`;
+        });
+      } else {
+        selectedOptionsHTML = "<li>No selected options</li>";
+      }
+
+      return selectedOptionsHTML;
+    }
+    // Function to update quantity in the cart
+    function updateQuantity(index, action) {
+      var cart = JSON.parse(localStorage.getItem(storeIDCurr+"Cart")) || [];
+
+      if (action === "increase") {
+        cart[index].quantity++;
+      } else if (action === "decrease" && cart[index].quantity > 1) {
+        cart[index].quantity--;
+      }
+      // Update total price based on quantity and selected options
+      var product = cart[index].product;
+      var selectedOptions = cart[index].selectedOptions || [];
+      var optionsPrice = selectedOptions.reduce((total, option) => total + parseFloat(option.price), 0);
+      cart[index].totalPrice = (product.Price + optionsPrice) * cart[index].quantity;
+
+      // Update cart data in local storage
+      localStorage.setItem(storeIDCurr+"Cart", JSON.stringify(cart));
+
+      // Display updated cart details
+      displayCartDetails();
+    }
+
+      // Function to delete item from the cart
+    function deleteItem(index) {
+      var cart = JSON.parse(localStorage.getItem(storeIDCurr+"Cart")) || [];
+      // Remove the item at the specified index
+      cart.splice(index, 1);
+      // Update cart data in local storage
+      localStorage.setItem(storeIDCurr+"Cart", JSON.stringify(cart));
+      // Display updated cart details
+      displayCartDetails();
+    }
+    //displayCartDetails();
+    //initialize product
+    document.addEventListener("DOMContentLoaded", function () {
+      const categoryNav = document.getElementById("category-nav");
+      const productContainer = document.getElementById("product-container");
+      // Extract unique categories from product data
+      const categories = Array.from(
+          new Set(products.flatMap(product => product.Categories))
+      );
+      categories.shift();//remove empty top element
+      categories.unshift("All");//add All to top element of array categories
+      // Create category navigation tabs
+      categories.forEach(category => {
+          const tab = document.createElement("a");
+          tab.href = "#";
+          tab.textContent = category;
+          tab.addEventListener("click", () => filterProducts(category));
+          categoryNav.appendChild(tab);
+      });
+      // Display all products initially
+      displayProducts(products);
+
+      // Function to filter and display products based on selected category
+      function filterProducts(category) {
+        if (category=="All"){
+                const filteredProducts = products;
+                displayProducts(filteredProducts);
+        } else {
+            const filteredProducts = products.filter(product =>
+                product.Categories.includes(category)
+            );
+            displayProducts(filteredProducts);
+        }
+      }
+
+      // Function to display products
+      function displayProducts(productsArray) {
+        productContainer.innerHTML = "";
+        // Loop through products and display details
+        productsArray.forEach(product => {
+          const card = document.createElement("div");
+          card.classList.add("product-card");
+          const productId = product.Id;
+          //populate product card
+          card.innerHTML = `
+            <h3 style="display:inline-block;">${productId}</h3>
+            <h3 style="display:inline-block;">${product.ProductName}</h3>
+            <img src ="${product.ProductImg}" alt="${product.ProductName}" class="product-img">
+            <p>${product.Description}</p>
+            <p>Price: $${product.Price.toFixed(2)}</p>
+            <button class="toggleOption" onclick="toggleOption('${productId}')">Options</button>
+            <div id="options-${productId}" class="options-container">`
+          for (const optionType in product.Options) {
+            card.innerHTML += `<h4 style="display: none;">${optionType}:</h4>`;
+            product.Options[optionType].forEach(item => {
+              for (const name in item) {
+                //console.log("  " + name + ": " + item[name]);
+                var optionName = name;
+                var optionPrice = item[name];
+                card.innerHTML += `
+                <label style="display: none;">>
+                <input type="radio" class="option-radio" name="${optionType}" data-product-id="${product.Id}" data-type="${optionType}" data-name="${optionName}" data-price="${optionPrice}">
+                ${optionName} - $${optionPrice.toFixed(2)}
+                </label>
+                </div>`;
+                }
+              })
+          }//close for (const optionType in product.Options) 
+          card.innerHTML += `<button class="add2Cart" onclick="addToCart('${productId}')">Add to Cart</button>`;
+          productContainer.appendChild(card);
+        });//closing productsArray.forEach
+        const add2CartButtons = document.querySelectorAll('.add2Cart');
+        add2CartButtons.forEach(button => {
+          button.addEventListener('click', event => {
+            // Add the "clicked" class for animation
+            button.classList.add('clicked');
+            const messageBox = document.querySelector(".message-box");
+            messageBox.style.display = "flex";
+            //console.log(messageBox);
+            // Remove the "clicked" class after animation ends (optional)
+            setTimeout(() => {
+              button.classList.remove('clicked');
+            }, 1000); // Adjust 1000ms to match your animation duration
+            setTimeout(() => {
+              messageBox.style.display = "none";
+            }, 2200); // Adjust 1000ms to match your animation duration
+          });
+        }); 
+      }//closing for displayProducts
+      //Finding the Product Card Element based on URL ProductID:
+      try{
+        const productId = urlParams.get('ProductID');
+        // Check if both parameters are present
+        if (productId==null) {
+          throw new Error('Missing productID in URL');
+        }
+        // Find the product card element
+        function findProductCard(productId) {
+          const productCards = document.querySelectorAll('.product-card');
+          for (const card of productCards) {
+            const h3ProductID = card.querySelector('h3').textContent.trim();
+            if (h3ProductID === productId) {
+              return card;
+            }
+          }
+          return null;
+        }
+        const productCard = findProductCard(productId);
+        if (!productCard) {
+          throw new Error('Product with ID ' + productId + ' not found');
+        }
+        
+        // Scrolling to the product card
+        productCard.scrollIntoView({ behavior: 'smooth' }); 
+      } catch (error) {
+        // Handle error gracefully
+        console.log('Error: ' + error.message);
+        // You can also do other things like logging the error to a server or redirecting to a different page.
+      }           
+    });//closing document.addEventListener 
+    function getOrderCode() {
+      var rdmString = "";
+      for( ; rdmString.length < 4; rdmString  += Math.random().toString(36).substr(2));
+      var d = new Date();
+      var mth=("0" + d.getDate()).slice(-2);
+      var date=("0" + (d.getMonth()+1)).slice(-2);
+      //var dateStr = String('-'+today.getDate()+today.toLocaleString('default', { month: 'short' }));
+      var dateStr = String('-'+mth+date+ d.getHours()+d.getMinutes());
+      return rdmString.substr(0, 4).toLocaleUpperCase()+dateStr 
+    }
+    // Find the product card element based on Id
+    function getProductCard(productId) {
+          const productCards = document.querySelectorAll('.product-card');
+          for (const card of productCards) {
+            const h3ProductID = card.querySelector('h3').textContent.trim();
+            if (h3ProductID === productId) {
+              return card;
+            }
+          }
+          return null;
+        }
+    // Function to toggle visibility of options when "Made it a meal" button is clicked
+    function toggleOption(productId,displayType) {
+      const product = getProductCard(productId);
+      let option = product.querySelector('.options-container');
+      let nextElements = [];
+      let nextElement = option.nextElementSibling; 
+      
+      while (nextElement) {
+          if (nextElement.classList.contains('add2Cart')) {
+              break;
+          }
+          nextElements.push(nextElement);
+          nextElement = nextElement.nextElementSibling;
+      }
+      nextElements.forEach(element => {
+        if (displayType==="none") {
+          element.style.display = 'none';
+        } else {
+          element.style.display = element.style.display === 'none' ? 'block' : 'none';
+        }
+      });
+      //console.log(nextElements);
+      //button.textContent = button.textContent === 'Made it a meal' ? 'Hide Meal Options' : 'Made it a meal';
+    }
+    </script>
+</body>
+
+</html>
