@@ -387,51 +387,28 @@
       <h4>Enter Date,Time & Delivery Option</h4>
       <form id="dateTimeForm">
         <label style="display:inline-block;" for="dateInput">Date: mm-dd-yyyy</label>
+          For Marsiling Mrt MeetUp Only
         <input type=date id="dateInput" required>
         <label for="hourInput">Hour: 24HR</label>
         <select id="hourInput">
-          <option value="05">05</option>
-          <option value="06">06</option>
-          <option value="07">07</option>
-          <option value="08">08</option>
-          <option value="09">09</option>
-          <option value="10">10</option>
-          <option value="11">11</option>
           <option value="12">12</option>
           <option value="13">13</option>
-          <option value="14">14</option>
-          <option value="15">15</option>
-          <option value="16">16</option>
-          <option value="17">17</option>
           <option value="18">18</option>
           <option value="19">19</option>
           <option value="20">20</option>
           <option value="21">21</option>
-          <option value="22">22</option>
-          <option value="23">23</option>
         </select>
         <label for="minInput">Time: Mins</label>
         <select id="minInput">
           <option value="00">00</option>
-          <option value="05">05</option>
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-          <option value="25">25</option>
           <option value="30">30</option>
-          <option value="35">35</option>
-          <option value="40">40</option>
-          <option value="45">45</option>
-          <option value="50">50</option>
-          <option value="55">55</option>
-          <option value="55">55</option>//added for 55 to 59 mins
         </select>
         <label for="deliveryOptions">Delivery Options:</label>
         <select id="deliveryOptions">
-          <option value="Self Pick Up">Self Pick ($0.00)</option>
+          <option value="Self Pick Up">Self Pick 8am-9pm 302 Woodlands St 31</option>
           <option value="By MeetUp Marsiling MRT">MeetUp Marsiling MRT($1.00)</option>
-          <option value="By MeetUp Woodlands MRT">MeetUp Woodlands MRT($1.80)</option>
-          <option value="Deliver To Home">Deliver To Home (> $2.00)</option>
+          <option value="By Appointment">To Arrange Time/Place Via Text($2.50)</option>
+         <!-- <option value="Deliver To Home">Deliver To Home (> $2.00)</option>-->
         </select>
         <button type="submit">Submit</button>
       </form>
@@ -1307,6 +1284,7 @@
       var currMin=Math.ceil(now.getMinutes()/5);
       hourEle.selectedIndex=currHour;
       minEle.selectedIndex=currMin;
+     //Listening to submit form for date time
       document.getElementById("dateTimeForm").addEventListener("submit", function(event) {
         event.preventDefault(); // Prevent default form submission
         var message ="";
