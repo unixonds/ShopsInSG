@@ -392,23 +392,23 @@
          <!-- <option value="Deliver To Home">Deliver To Home (> $2.00)</option>-->
         </select>  
       <h4>Enter Date,Time for Marsiling Mrt MeetUp Only</h4>
-      <form id="dateTimeForm" style="display: none;">//style: inline-block
+      <form id="dateTimeForm" style="display: inline-block;">
         <label for="dateInput">Date: For Marsiling Mrt MeetUp Only</label>
-        <input type=date id="dateInput" required>
-        <label for="hourInput">Hour: 24HR</label>
-        <select id="hourInput">
-          <option value="12">12</option>
+        <!--<input type=date id="dateInput" required>-->
+        <select id="dateTimeInput" required>
+          <option value="" disabled selected>Select a date and time</option>
+          <!--<option value="12">12</option>
           <option value="13">13</option>
           <option value="18">18</option>
           <option value="19">19</option>
           <option value="20">20</option>
-          <option value="21">21</option>
+          <option value="21">21</option>-->
         </select>
-        <label for="minInput">Time: Mins</label>
+        <!--<label for="minInput">Time: Mins</label>
         <select id="minInput">
           <option value="00">00</option>
           <option value="30">30</option>
-        </select>
+        </select>-->
         
         <button type="submit">Submit</button>
       </form>
@@ -596,29 +596,43 @@
         "StoreAddress": "302 Woodlands St31, Singapore",
         "LogoImg": "images/logo2.jpg",
         "StoreBannerImg": "images/StoreBanner4.jpg",
-        "StoreWebsite": "www.homemadefood.com",
+        "StoreWebsite": "www.unixonds.github.io/ShopsInSG/?StoreID:Foodtopia",
         "GeoLocation":{"Lat": 1.387353973, "Lon": 103.8064571},
         "StorePhone": "+6591518277",
-        "PromotionMessage": "All items at 20% discount while stock last. Welcome to Home Made Food, where we serve the best food that we love to eat! Try our creation of maki roll with our variety of fillings. Don't forget to add a side, and a drink to complete your meal. For a limited time, enjoy our Promotion of buy one get one free on any pizza. Hurry, this offer won't last long!",
+        "PromotionMessage": "All items at 20% discount while stock last. Welcome to Foodtopia, where we serve the best home made food that we love to eat! Try our creation of maki roll with our variety of fillings. Don't forget to add a side, and a drink to complete your meal. For a limited time, enjoy our Promotion of buy one get one free on any pizza. Hurry, this offer won't last long!",
         "Categories": ["All", "Featured", "Promotion", "Special"],
         "Products": [
         {"Id": "BB01",
-            "ProductName": "Special Maki Roll",
+            "ProductName": "Gimbab Roll Sesame Oil",
             "ProductImg" : "images/BB01.jpg",
-            "Description": "Specially created for Singaporean taste bud. You will want more! Standard: cucumber. Luxury: cucumber, egg, added rice, sesame mayonnaise. Premium: extra large, Filled with spicy Japanese Mayo, tuna, chicken floss, cucumber.",
+            "Description": "Specially created for Singaporean taste bud. You will want more! Standard: Spinach, carrot. Luxury: Cucumber, egg, crab stick, Japan Mayonniase, extra rice. Premium: extra large, Japanese Mayo, tuna, floss, cucumber.",
             "Categories": ["All", "Featured", "Special"],
             "Price": 1.50,
             "Options": {
+            "Size": [{"Standard 100g": 0.00,"Luxury 200g": 1.00,"Premium 400g": 2.50}],
             "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"Coke Zero 250mL": 1.00}],
-            "Size": [{"Standard 100g": 0.00,"Luxury 200g": 1.00,"Premium 400g": 3.00}],
             "Dessert": [{"No Thanks": 0.00, "Coconut Pudding": 2.00, "BoBo ChaCha": 2.40}],
             "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Fried Egg": 0.80}]
             },
             "Diet": ["LowCarbo/Sugar"]
         },
         {"Id": "BB02",
-            "ProductName": "Mua Chee",
+            "ProductName": "Japanese Maki Roll Vinegar",
             "ProductImg" : "images/BB02.jpg",
+            "Description": "Standard: Crab stick. Luxury: Cucumber, egg, crab stick, Japan Mayonniase, extra rice. Premium: extra large, Japanese Mayo, tuna, floss, cucumber.",
+            "Categories": ["All", "Featured", "Special"],
+            "Price": 1.50,
+            "Options": {
+            "Size": [{"Standard 100g": 0.00,"Luxury 200g": 1.00,"Premium 400g": 2.50}],
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"Coke Zero 250mL": 1.00}],
+            "Dessert": [{"No Thanks": 0.00, "Coconut Pudding": 2.00, "BoBo ChaCha": 2.40}],
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Fried Egg": 0.80}]
+            },
+            "Diet": ["LowCarbo/Sugar"]
+        },
+        {"Id": "BB03",
+            "ProductName": "Mua Chee",
+            "ProductImg" : "images/BB03.jpg",
             "Description": "Choice of Standard: White Only Luxury: Upsize to Black or White Premium: Large size mixed black & white. Option to be served with a drink of your choice.",
             "Categories": ["All", "Featured", "Special"],
             "Price": 1.20,
@@ -629,9 +643,9 @@
             },
             "Diet": ["Vegetarian", "LowCarbo/Sugar"]
         },
-        {"Id": "BB03",
+        {"Id": "BB04",
             "ProductName": "Bak Kwa Sandwich",
-            "ProductImg" : "images/BB03.jpg",
+            "ProductImg" : "images/BB04.jpg",
             "Description": "A tasty sandwich, with Bak Kwa meat, lettuce and cucumber. Option to add cheese to your sandwich and cheaper drink of your choice.",
             "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
             "Price": 6.30,
@@ -643,9 +657,9 @@
             },
             "Diet": ["HighProtein"]
         },
-        {"Id": "BB04",
+        {"Id": "BB05",
             "ProductName": "Double Hot Dog",
-            "ProductImg" : "images/BB04.jpg",
+            "ProductImg" : "images/BB05.jpg",
             "Description": "Two tasty hot dog, with chicken sausage, lettuce and tomato. Option to add cheese to your hot dog and cheaper drink of your choice.",
             "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
             "Price": 3.20,
@@ -1179,6 +1193,7 @@
           cart.style.display = 'none';
           cartClose.style.display = 'none'
           checkOutEle.style.display='none';
+          document.getElementById("formContainer").style.display = "none";
           //displayCartDetails();
           window.scrollTo(0, 0);
         } 
@@ -1266,6 +1281,94 @@
       cartTotalEle.innerHTML = grandTotal.toFixed(2);
       cartCountEle.innerHTML = cartCount; 
     }
+
+    // Get references to the elements
+    const deliveryOptionsEle = document.getElementById("deliveryOptions");
+
+    var requiredByEle = document.getElementById("dateTimeInput");
+    requiredByEle.disabled = true;
+    // Function to handle the state of dateTimeInput based on deliveryOptions selection
+    function updateMeetupDateTimeState() {
+      // Get the text content of the currently selected option in deliveryOptions
+      const selectedOptionText = deliveryOptionsEle.options[deliveryOptionsEle.selectedIndex].textContent;
+
+      // Check if the selected option text contains "MeetUp Marsiling"
+      if (selectedOptionText.includes("MeetUp Marsiling")) {
+          requiredByEle.disabled = false; // Enable the dateTimeInput select element
+          populateTimeOptions();
+      } else {
+          requiredByEle.disabled = true; // Disable the hourInput select
+          // Optionally, reset the hourInput to its placeholder when disabled
+          requiredByEle.value = ""; 
+      }
+    }
+
+    // Attach an event listener to the deliveryOptions select
+    deliveryOptionsEle.addEventListener("change", updateMeetupDateTimeState);
+
+    function populateTimeOptions() {
+      const hourInput = document.getElementById("dateTimeInput");
+      hourInput.innerHTML = '<option value="" disabled selected>Select a date and time</option>'; // Clear existing options
+
+      const now = new Date();
+      let currentOptionTime = new Date(now.getTime() + 20 * 60 * 1000); // Start 20 minutes from now
+
+      const allowedHours = [12, 13, 18, 19, 20, 21]; // 12 PM, 1 PM, 6 PM, 7 PM, 8 PM, 9 PM
+
+      for (let i = 0; i < 36; i++) {
+          let hour = currentOptionTime.getHours();
+          let minute = currentOptionTime.getMinutes();
+
+          // Round up to the next 30-minute interval (0 or 30)
+          if (minute > 30) {
+              currentOptionTime.setHours(hour + 1);
+              currentOptionTime.setMinutes(0);
+          } else if (minute > 0 && minute <= 30) {
+              currentOptionTime.setMinutes(30);
+          } else if (minute < 0) { // Should not happen but for safety
+              currentOptionTime.setMinutes(0);
+          }
+
+          hour = currentOptionTime.getHours();
+          minute = currentOptionTime.getMinutes();
+          
+          // Adjust for allowed hours
+          while (!allowedHours.includes(hour) || (hour === 21 && minute > 30)) {
+              if (hour >= 21 && minute >= 30) { // If past 9:30 PM, go to next day 12 PM
+                  currentOptionTime.setDate(currentOptionTime.getDate() + 1);
+                  currentOptionTime.setHours(12);
+                  currentOptionTime.setMinutes(0);
+              } else { // Increment hour until an allowed hour is found
+                  currentOptionTime.setHours(hour + 1);
+                  currentOptionTime.setMinutes(0); // Reset minutes when changing hour
+              }
+              hour = currentOptionTime.getHours();
+              minute = currentOptionTime.getMinutes();
+          }
+
+          // Format the date and time
+          const day = currentOptionTime.getDate();
+          const month = currentOptionTime.toLocaleString('en-US', {
+              month: 'long'
+          });
+          const year = currentOptionTime.getFullYear();
+          const formattedHour = hour > 12 ? hour - 12 : hour;
+          const ampm = hour >= 12 ? 'pm' : 'am';
+          const formattedMinute = minute.toString().padStart(2, '0');
+
+          const optionText = `${day} ${month} ${year} ${formattedHour}:${formattedMinute}${ampm}`;
+          const optionValue = optionText;//currentOptionTime.toISOString(); // Use ISO string for value for easy parsing later
+
+          const option = document.createElement("option");
+          option.value = optionValue;
+          option.textContent = optionText;
+          hourInput.appendChild(option);
+
+          // Increment for the next option (30 minutes)
+          currentOptionTime.setMinutes(currentOptionTime.getMinutes() + 30);
+      }
+    }
+
     //function to checkout
     function checkout() {
       //get time and delivery options
@@ -1274,7 +1377,10 @@
           return;
       } 
       document.getElementById("formContainer").style.display = "block";
-      var hourEle=document.getElementById("hourInput");
+      //populateTimeOptions();
+      //requiredEle is declared as gloabl in above
+      //requiredByEle.disabled = false;//initially disable the dateTimeInput select
+      /*var hourEle=document.getElementById("hourInput");
       var minEle=document.getElementById("minInput");
       var now = new Date();
       var currHour=now.getHours()-5;
@@ -1283,23 +1389,23 @@
       };
       var currMin=Math.ceil(now.getMinutes()/5);
       hourEle.selectedIndex=currHour;
-      minEle.selectedIndex=currMin;
-     //Listening to submit form for date time
+      minEle.selectedIndex=currMin;*/
+      //Listening to submit form for date time
       document.getElementById("dateTimeForm").addEventListener("submit", function(event) {
         event.preventDefault(); // Prevent default form submission
         var message ="";
-        var dateValue = document.getElementById("dateInput").value;
-        var hourValue = hourEle.value;
-        var minValue = minEle.value;
+        //var dateValue = document.getElementById("dateInput").value;
+        var requiredByText = document.getElementById("dateTimeInput").value;
+        //var minValue = minEle.value;
         var delivery = document.getElementById("deliveryOptions").value;
-        console.log("Cur hr="+hourValue+"cur min="+minEle.value);
-        var selectedDate = new Date(dateValue);    
-        var timeRequired = {
-          "date": dateValue,
-          "time": hourValue+minValue,
+        console.log(requiredByText)
+        //var selectedDate = new Date(hourValue);    
+        var timeDeliveryRequired = {
+          //"date": dateValue,
+          "time": requiredByText,//+minValue,
           "delivery": delivery
         };
-        console.log(timeRequired);
+        console.log(timeDeliveryRequired);
         //close user input
         document.getElementById("formContainer").style.display = "none";
         // prepare whatsapp message
@@ -1307,7 +1413,7 @@
         if (parseInt(cartCountEle.textContent)>0.9){
          /* alert("No items in your cart");
         } else {*/
-          let order="I am ordering -"+getOrderCode()+"\n from ";
+          let order="Order ID: "+getOrderCode()+"\n from ";
           // Get the "cart" element
           var cartElement = document.getElementById("cart");
           console.log(cartElement);
@@ -1329,7 +1435,7 @@
           const cartText = order+getTextContent(cartElement);
           // Create prompt message with line breaks added
           message+=cartText.replace(/\s+/g, " ").trim(); // Remove unnecessary whitespace
-          message+="\n Required on "+timeRequired.date+" at "+timeRequired.time+ "Hr Delivery: "+timeRequired.delivery
+          message+="\n Required on "+timeDeliveryRequired.time+" Delivery: "+timeDeliveryRequired.delivery
           // Construct the pre-built WhatsApp link with the encoded message
           const encodedMessage = encodeURIComponent(message);
           const whatsappLink = `https://wa.me/${store.StorePhone}?text=${encodedMessage}`;
