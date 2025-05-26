@@ -92,7 +92,7 @@
           cursor: pointer;
           width: 3rem; 
           height: 3rem;
-          z-index: 1001; /* Ensure it's above other content */
+          z-index: 2; /* Ensure it's above other content but below cart close*/
       }
       
       /* New styles for the checkout view within the cart */
@@ -105,6 +105,9 @@
       }
 
       #cart-close {
+        position: fixed;
+        top: 20px;
+        right: 10px;
         font-size: 2.5rem;
         color: red;
         background-color: #444;
@@ -698,11 +701,11 @@
         {"Id": "BB01",
             "ProductName": "Gimbab Roll Sesame Oil",
             "ProductImg" : "images/BB01.jpg",
-            "Description": "Specially created for Singaporean taste bud. You will want more! Standard: Spinach, carrot. Luxury: Cucumber, egg, crab stick, Japan Mayonniase, extra rice. Premium: extra large, Japanese Mayo, tuna, floss, cucumber.",
+            "Description": "Specially created for Singaporean taste bud. You will want more! >>Standard: Spinach. >>Luxury: Cucumber, egg, crab stick, Japan Mayonniase, extra rice. >>Premium: extra large, Japanese Mayo, tuna, floss, cucumber.",
             "Categories": ["All", "Featured", "Special"],
             "Price": 1.50,
             "Options": {
-            "Size": [{"Standard 100g": 0.00,"Luxury 200g": 1.00,"Premium 400g": 2.50}],
+            "Size": [{"Standard 70g": 0.00,"Luxury 200g": 1.00,"Premium 400g": 2.50}],
             "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"CokeZero 250mL": 1.00}],
             "Dessert": [{"No Thanks": 0.00, "Coconut Pudding": 2.00, "BoBo ChaCha": 2.40}],
             "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Fried Egg": 0.80}]
@@ -712,11 +715,11 @@
         {"Id": "BB02",
             "ProductName": "Japanese Maki Roll Vinegar",
             "ProductImg" : "images/BB02.jpg",
-            "Description": "Standard: Crab stick. Luxury: Cucumber, egg, crab stick, Japan Mayonniase, extra rice. Premium: extra large, Japanese Mayo, tuna, floss, cucumber.",
+            "Description": ">>Standard: Crab stick. Luxury: Cucumber, egg, crab stick, Japan Mayonniase, Black Pepper, Chilli, extra rice. Premium: extra large, Japanese Mayo, tuna, floss, cucumber.",
             "Categories": ["All", "Featured", "Special"],
             "Price": 1.50,
             "Options": {
-            "Size": [{"Standard 100g": 0.00,"Luxury 200g": 1.00,"Premium 400g": 2.50}],
+            "Size": [{"Standard 100g": 0.00,"Luxury 240g": 1.00,"Premium 400g": 2.50}],
             "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"CokeZero 250mL": 1.00}],
             "Dessert": [{"No Thanks": 0.00, "Coconut Pudding": 2.00, "BoBo ChaCha": 2.40}],
             "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Fried Egg": 0.80}]
@@ -765,7 +768,7 @@
             },
             "Diet": ["HighProtein"]
         },
-        {"Id": "BB05",
+        {"Id": "BB06",
             "ProductName": "Wrap",
             "ProductImg" : "images/BB05.jpg",
             "Description": "A delicious wrap, made with chili spicy Japanese Mayo, tuna, chicken floss, cucumber",
@@ -941,14 +944,6 @@
                 cartItemsHtml += `
                     <div class="cart-item">
                         <p>${item.productName} ($${item.price.toFixed(2)} / unit)</p>
-                        <div class="cart-item-actions">
-                            <div class="cart-item-qty">
-                                <button class="decrease-qty-btn" data-index="${index}">-</button>
-                                <span>${item.quantity}</span>
-                                <button class="increase-qty-btn" data-index="${index}">+</button>
-                            </div>
-                            <button class="remove-from-cart-btn" data-index="${index}">Remove</button>
-                        </div>
                         <ul>
                             ${Object.entries(item.selectedOptions).map(([group, options]) => {
                                 if (Array.isArray(options)) {
@@ -967,6 +962,15 @@
                             }).join('')}
                         </ul>
                         <p>Item Total: $${itemTotal.toFixed(2)}</p>
+                        <div class="cart-item-actions">
+                            <div class="cart-item-qty">
+                                <button class="decrease-qty-btn" data-index="${index}">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="increase-qty-btn" data-index="${index}">+</button>
+                            </div>
+                            <button class="remove-from-cart-btn" data-index="${index}">Remove</button>
+                        </div>
+                        
                         <hr>
                     </div>
                 `;
@@ -1299,7 +1303,7 @@
         
         renderCartContent();
         showMessageBox();
-        toggleOption(productId, 'none'); 
+        //toggleOption(productId, 'none'); 
         clearAllOptionsExceptForProduct(productId); 
         selectedOptions = {}; 
     }
@@ -1430,7 +1434,7 @@
 
         const toggleButton = productCard.querySelector('.toggleOption');
         toggleButton.textContent = isHidden ? 'Hide Options' : 'Options';
-
+        //Clear option by setting each option to false
         if (isHidden) {
             selectedOptions = {}; 
             productCard.querySelectorAll('.options-group input').forEach(input => {
