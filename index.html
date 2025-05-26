@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shops in SG</title>
     <script src="util.js"></script>
-<!--StoreID=ABC123&ProductID=DD57-->
     <style>
       @keyframes showMessage {
         0% {
@@ -21,9 +20,6 @@
         }
         50% {
           transform: translate(100vw, -100vh) scale(0.05);
-          /*transform: translate(calc(100% - var(--button-width)), calc(-100% + var(--button-height))); /* Move to top right corner 
-          transform-origin: top right; /* Shrink from top right corner 
-          scale: 0.05; /* Shrink to 5% */
         }
         100% {
           transform: translate(0, 0) scale(1);
@@ -34,10 +30,12 @@
               transform: translateX(0%);
           }
           100% {
-              transform: translateX(-100%);
+              transform: translateX(-20%);
           }
       }
-      
+      #announcement{
+        padding: 1%;
+      }
       body {
         font-family: 'Arial', sans-serif;
         margin: 0;
@@ -47,15 +45,6 @@
         position: relative;
         color: #fff;
       }
-      /*      @keyframes enlargeAndMove {
-      0% {transform: scale(1) translate(0, 0);}
-      25% {transform: scale(2.5) translate(0, 0);}
-      50% { transform: scale(0.1) translate(100%, -100%);}
-      75% { transform: scale(0.1) translate(100%, -100%);
-        display: none;}
-      100% { transform: scale(1) translate(0, 0);
-        display: block;}
-      }*/
   
       button {
         display: inline-block;
@@ -65,20 +54,28 @@
         font-weight: bold;
         text-align: center;
         cursor: pointer;
-        border: 2px solid #3498db; /* Border color */
+        border: 2px solid #3498db;
         background: #d00;
-        border-radius: 12px; /* Rounded corners */
-        transition: background-color 0.3s, color 0.3s; /* Smooth transition on hover */
-        animation: enlargeAndMove 4s ease-in-out; /* Apply animation */
+        border-radius: 12px;
+        transition: background-color 0.3s, color 0.3s;
       }
   
       button:hover {
-        background-color: #3498db; /* Change background color on hover */
-        color: #ffffff; /* Change text color on hover */
+        background-color: #3498db;
+        color: #ffffff;
       }
       #cart {
         display: none;
-  
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        overflow-y: auto;
+        padding: 20px;
+        box-sizing: border-box;
       }
       #cart-icon {
           position: fixed;
@@ -86,7 +83,7 @@
           right: 10px;
           background-image: url(images/cart.svg);
           background-size: 2.8rem 2.8rem;
-          background-color: #3498db;
+          background-color: #3498db; 
           background-position: center center;
           background-repeat: no-repeat;
           color: yellow;
@@ -95,22 +92,41 @@
           cursor: pointer;
           width: 3rem; 
           height: 3rem;
-          z-index: 1;
+          z-index: 1001; /* Ensure it's above other content */
       }
-  
+      
+      /* New styles for the checkout view within the cart */
+      .cart-header-buttons {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+          padding: 0 10px;
+      }
+
       #cart-close {
-        display: none;
-        position: absolute;
-        top: -20%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 3rem;
+        font-size: 2.5rem;
         color: red;
         background-color: #444;
         z-index: 3;
         border-radius: 50%;
         padding: 5px 20px;
+        cursor: pointer;
+        border: none; /* Remove default button border */
       }
+
+      #send-order-btn {
+        background-color: #28a745; /* Green color for send order */
+        border: 2px solid #28a745;
+        padding: 10px 15px;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 8px;
+      }
+      #send-order-btn:hover {
+        background-color: #218838;
+      }
+
       #cart-container {
         display: flex;
         flex-wrap: wrap;
@@ -118,7 +134,7 @@
       /* For first to maintain*/
       #cart-title {
         margin-right: 30px;
-        margin-bottom: 10px; /* Adjust this value for vertical gap */
+        margin-bottom: 10px;
       }
       #cart-icon:hover {
         background-color: #294089;
@@ -162,18 +178,19 @@
         justify-content: center;
         z-index: 999;
       }
-      /*#checkout-page.hidden {
-        display: none;
-      }*/
       #category-nav {
         position: sticky;
-        width: 90%;
+        width: 90%; 
+        margin: 0 auto; 
         top: 1px;
         height: 3rem;
         overflow-x: auto;
         white-space: nowrap;
         background-color: #315;
         display: flex;
+        align-items: center; 
+        justify-content: space-around; 
+        border-radius: 5px;
       }
       #category-nav a {
         display: inline-block;
@@ -181,7 +198,8 @@
         color: white;
         text-align: center;
         text-decoration: unset;
-        font-size: 16 px;
+        font-size: 16px;
+        flex-grow: 1; 
       }
       #category-nav a:hover {
         background-color: #d00;
@@ -196,10 +214,9 @@
       display: block;
       border: 1px solid black;
       margin: 5px;
-      padding: 5px; /* Add padding for better appearance */
+      padding: 5px;
       }
       .message-box {
-        /*display: flex;*/
         font-size: 20px;
         justify-content: center;
         align-items: center;
@@ -237,49 +254,50 @@
           margin: 10px;
           padding: 15px;
           width: 300px;
-          box-shadow: 0 0 10px rgb(255, 0, 149); /* Blue shadow */
+          box-shadow: 0 0 10px rgb(255, 0, 149);
       }
       #store-address {
         color: gold;
         margin: 8px 4px 2px 4px
       }
       #store-banner {
-        /*overflow-x: auto;*/
-        width: 40%;
+        width: 40%; 
         height: 8rem;
         border: 1px solid rgba(245, 241, 7, 0.815);
+        order: 1; 
       }
       #store-front {
-        justify-content: center;
         display: flex;
         flex-wrap: wrap;
         flex-direction: row;
+        justify-content: space-between; 
+        align-items: center; 
         background-color: #222252;
-        /*height: 100vh;  Adjust as needed */
+        padding: 10px; 
       }
       #store-info {
-        width: 30vw;
+        width: calc(40% - 20px); 
         color: yellow;
         display: flex;
-        flex-direction: column; /* This makes the child elements stack vertically */
-        gap: 5px; 
-        /*height: 100vh;  Adjust the height as needed */
+        flex-direction: column;
+        gap: 5px;
+        text-align: center; 
+        order: 2; 
       }
-      #store-info > * {  /* Asterisk is wild card for all child*/
+      #store-info > * {
         width: 100%;
         color: gold;
         margin: 4px 4px 4px 4px;
         border: 1px solid rgba(245, 241, 235, 0.815);
-        /*height: 100vh;  Adjust the height as needed */
       }
       #store-logo {
-        /*overflow-x: auto;
-        align-self: flex-end;*/
         vertical-align: middle;
         margin-top: 1rem;
-        width: 6rem; 
+        width: 20%; 
         height: 6rem;
-        border: 1px solid rgba(245, 241, 7, 0.815); /* Corrected the border property */
+        border: 1px solid rgba(245, 241, 7, 0.815);
+        order: 3; 
+        margin-right: 5%; 
       }
       #store-msg-sticky {
         color: #fff;
@@ -296,70 +314,178 @@
         color: #fff;
         display: inline-block;
         margin: 1px 4px;
-        padding-left: 100px; /* Space between iterations */
-        animation: marquee 25s linear infinite; /* Adjust the duration as needed */
+        padding-left: 100px;
+        animation: marquee 25s linear infinite;
       }
       #store-web {
         color: gold;
-        /*margin: 8px 4px 2px 4px;  2px gap between elements */
       }
       #store-wsphone {
-        color: gold; /*2px gap between elements */
+        color: gold;
         display: block;
       }
       .toggleOption {
         display: inline-block;
         margin-bottom: 10px;
-        color: #bbf;
+        color: #fff; 
         padding: 10px;
         font-size: 14px;
         font-weight: bold;
         text-align: center;
         cursor: pointer;
-        border: 2px solid #3498db; /* Border color */
+        border: 2px solid #3498db;
         background: #d00;
-        border-radius: 10px; /* Rounded corners */
-        transition: background-color 0.3s, color 0.3s; /* Smooth transition on hover */
-        animation: enlargeAndMove 4s ease-in-out; /* Apply animation */
+        border-radius: 10px;
+        transition: background-color 0.3s, color 0.3s;
       }
-      /*CSS to style form into 2 columns*/
+      .options-group label input[type="checkbox"] {
+        margin-right: 5px;
+      }
+      /* Cart Item Quantity and Remove Buttons Row */
+      .cart-item-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Space between buttons */
+        margin-top: 10px;
+        flex-wrap: wrap; /* Allow wrapping on small screens */
+        justify-content: flex-end; /* Align buttons to the right */
+      }
+
+      .cart-item-actions button {
+        padding: 8px 12px;
+        font-size: 1rem;
+        border-radius: 8px; /* Slightly more rounded */
+        border: 2px solid #3498db; /* Consistent border */
+        background-color: #d00; /* Matching remove button style */
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .cart-item-actions button:hover {
+        background-color: #3498db;
+        color: #fff;
+      }
+      
+      .cart-item-qty {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      /* Styles for checkout form */
       #formContainer {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start; /* Align labels to the left */
+        width: 100%;
+        margin-bottom: 20px;
       }
 
+      #formContainer label,
+      #formContainer select,
+      #formContainer button {
+          width: 95%; /* Adjust width to fit within cart */
+          margin-bottom: 10px; /* Space between form elements */
+          padding: 8px;
+          font-size: 1rem;
+          border-radius: 5px;
+      }
+      #formContainer select {
+        background-color: #333;
+        color: #fff;
+        border: 1px solid #555;
+      }
       #dateTimeForm {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 20px;
+        display: flex; /* Use flex for horizontal alignment */
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
       }
-
-      #formContainer>label,
-      #formContainer>input,
-      #formContainer>select {
+      #dateTimeForm label {
+        margin-bottom: 5px;
+      }
+      #dateTimeForm select {
         width: 95%;
       }
-    /*To do - style store front to vertical*/
+      #dateTimeForm button {
+        width: auto; /* Allow submit button to size naturally */
+        align-self: flex-end; /* Align submit button to the right */
+        margin-top: 10px;
+      }
+
+      /* Cart Item Detailed Display in Checkout */
+      .cart-item-checkout {
+          display: flex;
+          flex-direction: column;
+          border: 1px solid #555;
+          border-radius: 8px;
+          padding: 10px;
+          margin-bottom: 10px;
+          background-color: #222;
+      }
+
+      .cart-item-summary {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 5px;
+      }
+
+      .cart-item-code-qty {
+          font-weight: bold;
+          font-size: 1.1rem;
+      }
+
+      .cart-item-prices {
+          text-align: right;
+      }
+
+      .cart-item-options {
+          font-size: 0.9rem;
+          color: #bbb;
+          margin-left: 10px;
+      }
+      .cart-item-options ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+      }
+      .cart-item-options li {
+          margin-bottom: 2px;
+      }
+      .cart-item-controls {
+          display: flex;
+          justify-content: flex-end; /* Align buttons to the right */
+          gap: 10px;
+          margin-top: 10px;
+      }
+      .cart-item-controls button {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+        border-radius: 6px;
+      }
+
+      #checkout-store-unique {
+        color: #f39c12; /* Orange color for emphasis */
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+      
       @media only screen and (max-width: 500px) {
         #store-front {
           text-align: center;
-          /*display: block;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;flex-direction: row;
-          height: 100vh;  Adjust as needed */
+          flex-direction: column; 
         }
-        #store-banner {
-          /*overflow-x: auto;*/
-          width: 80vw;
-          height: 8rem;
+        #store-banner, #store-logo, #store-info {
+            width: 80vw; 
+            margin: 5px auto; 
+            order: unset; 
         }
   
         #store-info {
           width: 70vw;
-          gap: 3px; 
-          /*height: 100vh;  Adjust the height as needed */
+          gap: 3px;
         }
   
         #store-logo {
@@ -367,7 +493,7 @@
           align-items: center;
           width: 6rem; 
           height: 6rem;
-          border: 1px solid rgba(245, 241, 7, 0.815); /* Corrected the border property */
+          border: 1px solid rgba(245, 241, 7, 0.815);
         }
           #category-nav {
             width: 90%;
@@ -376,61 +502,27 @@
       </style>
 </head>
 <body>
-    <div id="cart-icon">
+    <div id="cart-icon" role="button" aria-expanded="false" tabindex="0">
         <span id="cart-count">0</span>
-        <p id="cart-close"> X </p>
         <span id="cart-total">$0.00</span>
     </div>
-    <!-- Checkout Page -->
-    <button onclick='checkout()' id="checkOutBtn" style="display: none;">Check Out</button>
-    <div id="formContainer" style="display: none;">
-      <label for="deliveryOptions">Delivery Options:</label>
-        <select id="deliveryOptions">
-          <option value="Self Pick Up">Self Pick 8am-9pm 302 Woodlands St 31</option>
-          <option value="By MeetUp Marsiling MRT">MeetUp Marsiling MRT($1.00)</option>
-          <option value="By Appointment">To Arrange Time/Place Via Text($2.50)</option>
-         <!-- <option value="Deliver To Home">Deliver To Home (> $2.00)</option>-->
-        </select>  
-      <h4>Enter Date,Time for Marsiling Mrt MeetUp Only</h4>
-      <form id="dateTimeForm" style="display: inline-block;">
-        <label for="dateInput">Date: For Marsiling Mrt MeetUp Only</label>
-        <!--<input type=date id="dateInput" required>-->
-        <select id="dateTimeInput" required>
-          <option value="" disabled selected>Select a date and time</option>
-          <!--<option value="12">12</option>
-          <option value="13">13</option>
-          <option value="18">18</option>
-          <option value="19">19</option>
-          <option value="20">20</option>
-          <option value="21">21</option>-->
-        </select>
-        <!--<label for="minInput">Time: Mins</label>
-        <select id="minInput">
-          <option value="00">00</option>
-          <option value="30">30</option>
-        </select>-->
-        
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+    
     <div id="cart">
-      <!-- Cart details will be displayed here using JavaScript -->
-    </div>
+      </div>
     
     <div id="store-front">
       
     </div>
+    <div id="announcement"></div>
     <nav id="category-nav">
-        <!-- Navigation tabs dynamically created from category values -->
-    </nav>
+        </nav>
     <div id="store-msg-sticky">
       <p id="store-msg">
-      <span>This is text that will be placed</span>
+      <span>Place holder for Store message</span>
       </p>
     </div>
     <div id="product-container">
-        <!-- Product cards dynamically created here -->
-    </div>
+        </div>
     <div class="message-box">Tap the cart icon <br>to view order
     </div>
     <script>
@@ -480,9 +572,9 @@
             "Categories": ["All", "Lunch", "Dinner"],
             "Price": 4.50,
             "Options": {
-            "Drink": [{"No Thanks": 0.00, "Mango Juice": 4.00, "Lime Juice": 0.50, "CokeZero 250mL": 0.50}],
-            "Dessert": [{"No Thanks": 0.00,"ChengDo": 2.00, "BoBo ChaCha": 3.20}],
-            "AddOn": [{"No Thanks": 0.00, "Seafood Toufu": 2.00, "Fish Cake": 3.20, "Fruit Rojak": 2.10, "Poach Egg": 1.20}]
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}],
+            "Dessert": [{"No Thanks": 0.00,"ChengDo": 2.00,"BoBo ChaCha": 3.20}],
+            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
             },
             "Diet": ["HighProtein"]
         },
@@ -519,7 +611,7 @@
             "Categories": ["All", "Lunch", "Dinner", "Special"],
             "Price": 6.10,
             "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}],
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}],
             "Dessert": [{"No Thanks": 0.00,"ChengDo": 2.00,"BoBo ChaCha": 3.20}],
             "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
             },
@@ -532,7 +624,7 @@
             "Categories": ["All", "Lunch", "Dinner"],
             "Price": 6.20,
             "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}], 
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}], 
             "Dessert": [{"No Thanks": 0.00,"ChengDo": 2.00,"BoBo ChaCha": 3.20}],
             "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
             },
@@ -545,7 +637,7 @@
             "Categories": ["All", "Breakfast", "Lunch", "Dinner", "Special"],
             "Price": 6.40,
             "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}], 
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}], 
             "Dressing": [{"No Thanks": 0.00,"Dressing2": 0.50,"Dressing3": 0.50,"Dressing4": 0.50}], 
             "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
             },
@@ -558,7 +650,7 @@
             "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
             "Price": 4.20,
             "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}],
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}],
             "Bread": [{"No Thanks": 0.00,"Italian": 0.50,"Oat": 0.50,"Grain 100%": 0.50}],
             "Meat": [{"No Thanks": 0.00,"Chicken Nuggets": 1.00,"Fried Fish Fillet": 1.00,"Mutton Cubes": 1.00}],
             "Cheese": [{"No Thanks": 0.00,"Mozerella": 0.50,"Parmesan": 0.50,"Cheddar": 0.50}],
@@ -574,7 +666,7 @@
             "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
             "Price": 4.35,
             "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}],
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}],
             "Tortilla": [{"Tortilla1": 0.00,"Tortilla2": 0.50,"Tortilla3": 0.50,"Tortilla4": 0.50}],
             "Meat": [{"No Thanks": 0.00,"Chicken Nuggets": 1.00,"Fried Fish Fillet": 1.00,"Mutton Cubes": 1.00}],
             "Cheese": [{"No Thanks": 0.00,"Mozerella": 0.50,"Parmesan": 0.50,"Cheddar": 0.50}],
@@ -591,7 +683,7 @@
         }
     },
     {"StoreId": "Foodtopia",
-        "StoreUnique": "WLS302HomeMadeFood",
+        "StoreUnique": "WLS302Foodtopia",
         "StoreName": "Home Made Food",
         "StoreAddress": "302 Woodlands St31, Singapore",
         "LogoImg": "images/logo2.jpg",
@@ -599,6 +691,7 @@
         "StoreWebsite": "www.unixonds.github.io/ShopsInSG/?StoreID:Foodtopia",
         "GeoLocation":{"Lat": 1.387353973, "Lon": 103.8064571},
         "StorePhone": "+6591518277",
+        "Annoncement":"For large advance order, we can deliver to home address. Delivery fee applies.",
         "PromotionMessage": "All items at 20% discount while stock last. Welcome to Foodtopia, where we serve the best home made food that we love to eat! Try our creation of maki roll with our variety of fillings. Don't forget to add a side, and a drink to complete your meal. For a limited time, enjoy our Promotion of buy one get one free on any pizza. Hurry, this offer won't last long!",
         "Categories": ["All", "Featured", "Promotion", "Special"],
         "Products": [
@@ -610,7 +703,7 @@
             "Price": 1.50,
             "Options": {
             "Size": [{"Standard 100g": 0.00,"Luxury 200g": 1.00,"Premium 400g": 2.50}],
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"Coke Zero 250mL": 1.00}],
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"CokeZero 250mL": 1.00}],
             "Dessert": [{"No Thanks": 0.00, "Coconut Pudding": 2.00, "BoBo ChaCha": 2.40}],
             "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Fried Egg": 0.80}]
             },
@@ -624,7 +717,7 @@
             "Price": 1.50,
             "Options": {
             "Size": [{"Standard 100g": 0.00,"Luxury 200g": 1.00,"Premium 400g": 2.50}],
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"Coke Zero 250mL": 1.00}],
+            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"CokeZero 250mL": 1.00}],
             "Dessert": [{"No Thanks": 0.00, "Coconut Pudding": 2.00, "BoBo ChaCha": 2.40}],
             "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Fried Egg": 0.80}]
             },
@@ -638,7 +731,7 @@
             "Price": 1.20,
             "Options": {
             "Size": [{"Standard 100g": 0.00,"Luxury 200g White": 1.00,"Luxury 200g Black": 1.00,"Premium 400g Black & White": 2.50}],
-            "Drink": [{"No Thanks": 0.00,"Mango Milk Juice 200mL": 2.00,"Lime Juice": 1.00,"Coke Zero 250mL": 1.00}],
+            "Drink": [{"No Thanks": 0.00,"Mango Milk Juice 200mL": 2.00,"Lime Juice": 1.00,"CokeZero 250mL": 1.00}],
             "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 1.80,"Fruit Rojak": 2.10,"Fried Egg": 1.00}]
             },
             "Diet": ["Vegetarian", "LowCarbo/Sugar"]
@@ -650,7 +743,7 @@
             "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
             "Price": 6.30,
             "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.80,"Lime Juice": 1.00,"Coke Zero 250mL": 1.500}],
+            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.80,"Lime Juice": 1.00,"CokeZero 250mL": 1.500}],
             "Meat": [{"No Thanks": 0.00,"Chicken Nuggets 4pcs": 2.00,"Fried Fish Fillet": 1.00,"Hard Bolied Egg": 0.80}],
             "Cheese": [{"No Thanks": 0.00,"Mozerella": 1.80,"Cheddar": 1.80}],
             "AddOn": [{"No Thanks": 0.00,"Seafood Toufu 2pcs": 2.00,"Fish Cake": 1.80,"Fruit Rojak": 2.40,"Hard Bolied Egg": 0.80}]
@@ -664,7 +757,7 @@
             "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
             "Price": 3.20,
             "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.50,"Lime Juice": 0.50,"Coke Zero 250mL": 0.50}],
+            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.50,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}],
             "Bread": [{"No Thanks": 0.00,"Italian": 0.50,"Oat": 0.50,"Grain 100%": 0.50}],
             "Meat": [{"No Thanks": 0.00,"Chicken Nuggets 4pcs": 1.00,"Fried Fish Fillet": 1.00,"Hard Bolied Egg": 1.00}],
             "Cheese": [{"No Thanks": 0.00,"Egg Mayonaise": 0.60,"Mozerella": 1.80,"Cheddar": 1.80}],
@@ -679,11 +772,11 @@
             "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
             "Price": 5.40,
             "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.00,"Lime Juice": 1.50,"Coke Zero 250mL": 0.50}],
+            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.00,"Lime Juice": 1.50,"CokeZero 250mL": 0.50}],
             "Tortilla": [{"Tortilla1": 0.00,"Tortilla2": 0.50,"Tortilla3": 0.50,"Tortilla4": 0.50}],
             "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
             "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
-            "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Hard Bolied Egg": 0.80 } ] 
+            "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Hard Bolied Egg": 0.80 } ]
             },
             "Diet": ["LowCarbo/Sugar"]
         }
@@ -709,982 +802,759 @@
         {"Id": "Art001",
             "ProductName": "Koi In Pond- Blue Sky Reflection",
             "ProductImg" : "images/Art1.jpg",
-            "Description": "Done by local artist <Name>. <name> has been in the art scene for 15 years. She is .......",
-            "Categories": ["All", "Modern", "Promotion"],
-            "Price": 555.50,
+            "Description": "Done by local artist <Name>. <name> has been in the art scene for 15 years. <name> was awarded the Young Artist Award in 2018.",
+            "Categories": ["All", "Abstract", "Oil Paint", "Promotion"],
+            "Price": 12000.00,
             "Options": {
-            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 80.00 , "Classical Frame": 120 } ], 
-            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 33 } ]
+            "Frame": [{"No Frame": 0.00,"Simple Frame": 200.00,"Gold Plated Frame": 500.00}], 
+            "AddOn": [{"No Thanks": 0.00, "Signed by Artist": 500.00}],
+            "Shipment": [{"No Thanks": 0.00,"Local Delivery": 20.00, "International Shipping": 500.00}]
             },
-            "Classification": ["Contemporary"]
+            "Diet": ["No restriction"]
         },
         {"Id": "Art002",
-            "ProductName": "Imagine Flowers",
+            "ProductName": "Shophouse In Rain",
             "ProductImg" : "images/Art2.jpg",
-            "Description": "Done by local artist <Name>. <name> has been in the art scene for 15 years. She is .......",
-            "Categories": ["All", "Abstract"],
-            "Price": 800.00,
+            "Description": "Done by local artist <Name>. <name> has been in the art scene for 15 years. <name> was awarded the Young Artist Award in 2018.",
+            "Categories": ["All", "Abstract", "Oil Paint", "Special"],
+            "Price": 8000.00,
             "Options": {
-            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 80.00 , "Classical Frame": 120 } ], 
-            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 33 } ]
-            }, 
-            "Classification": ["Modern"] 
+            "Frame": [{"No Frame": 0.00,"Simple Frame": 200.00,"Gold Plated Frame": 500.00}], 
+            "AddOn": [{"No Thanks": 0.00, "Signed by Artist": 500.00}],
+            "Shipment": [{"No Thanks": 0.00,"Local Delivery": 20.00, "International Shipping": 500.00}]
+            },
+            "Diet": ["No restriction"]
         },
-        {"Id": "Art003", 
-            "ProductName": "Graceful White Pigeon on Tree Branches",
+        {"Id": "Art003",
+            "ProductName": "My Neighbor's Cat",
             "ProductImg" : "images/Art3.jpg",
-            "Description": "Done by Chinese (HangZhou) artist <Name>. This piece was inspired by the beautiful... <name> has been in the art scene for 15 years. He is ........",
-            "Categories": ["All", "Oil Paint"],
-            "Price": 355.55,
+            "Description": "Done by local artist <Name>. <name> has been in the art scene for 15 years. <name> was awarded the Young Artist Award in 2018.",
+            "Categories": ["All", "Abstract", "Photography"],
+            "Price": 6000.00,
             "Options": {
-            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 80.00 , "Classical Frame": 120 } ], 
-            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 30 } ]
-            }, 
-            "Classification": ["Modern"] 
+            "Frame": [{"No Frame": 0.00,"Simple Frame": 200.00,"Gold Plated Frame": 500.00}], 
+            "AddOn": [{"No Thanks": 0.00, "Signed by Artist": 500.00}],
+            "Shipment": [{"No Thanks": 0.00,"Local Delivery": 20.00, "International Shipping": 500.00}]
+            },
+            "Diet": ["No restriction"]
         },
-        {
-            "Id": "Art004",
-            "ProductName": "Poster - Start the Day Smiling",
+        {"Id": "Art004",
+            "ProductName": "Home",
             "ProductImg" : "images/Art4.jpg",
-            "Description": "Waking to a nice poster greeting you with beautiful monring scene. A great way to start your day",
-            "Categories": ["All", "Photography"],
-            "Price": 25.00,
+            "Description": "Done by local artist <Name>. <name> has been in the art scene for 15 years. <name> was awarded the Young Artist Award in 2018.",
+            "Categories": ["All", "Modern", "Photography"],
+            "Price": 10000.00,
             "Options": {
-            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 80.00 , "Classical Frame": 120 } ], 
-            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 30 } ]
-            }, 
-            "Classification": ["Modern"] 
-        },
-        {"Id": "Art005",
-            "ProductName": "Poster - Motivational Start Now",
-            "ProductImg" : "images/Art5.jpg",
-            "Description": "Get yourself a kick start and perk up for your new journey in life",
-            "Categories": ["All", "Photography", "Promotion"],
-            "Price": 15.00,
-            "Options": {
-            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 80.00 , "Classical Frame": 120 } ], 
-            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 33 } ]
-            }, 
-            "Classification": ["Modern"] 
-        },
-        {"Id": "Art006",
-            "ProductName": "Cheesy Sandwich",
-            "ProductImg" : "images/Art6.jpg",
-            "Description": "A delicious image of your product. Excite your customer's hunger pang with this amazing provocation",
-            "Categories": ["All", "Photography"],
-            "Price": 15.70,
-            "Options": {
-            "Framing": [ { "No Thanks": 0.00, "Modern Frame": 50.00 , "Classical Frame": 60 } ], 
-            "AddOn": [ { "No Thanks": 0.00, "Preservation treatment": 50.00 , "Moisture Barrier": 33 } ]
-            }, 
-            "Classification": ["Modern"]
+            "Frame": [{"No Frame": 0.00,"Simple Frame": 200.00,"Gold Plated Frame": 500.00}], 
+            "AddOn": [{"No Thanks": 0.00, "Signed by Artist": 500.00}],
+            "Shipment": [{"No Thanks": 0.00,"Local Delivery": 20.00, "International Shipping": 500.00}]
+            },
+            "Diet": ["No restriction"]
         }
         ],
-    "OperationHours": {
-      "weekday": "Monday to Sunday",
-      "startTime": "8:00 AM",
-      "endTime": "10:00 PM"
+        "OperationHours": {
+        "weekday": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "startTime": "10:00 AM",
+        "endTime": "6:00 PM"
+        }
     }
-  },
-  { "StoreId": "AmazingTiramisu",
-        "StoreUnique": "Hog001AmazingTiramisu",
-        "StoreName": "AmazingTiramisu",
-        "StoreAddress": "233 Hougang Street 21, Singapore",
-        "LogoImg": "images/logo4.jpg",
-       "StoreBannerImg": "images/StoreBanner4.jpg",
-        "StoreWebsite": "www.amazingtiramisu.sg",
-        "GeoLocation":{"Lat": 1.387353973, "Lon": 103.8064571},
-        "StorePhone": "+6597358539",
-        "PromotionMessage": "Welcome to Amazing Tiramisu, where we serve the best Tirisa in Singapore! Try our classic Tiramisu, made with Rum, mozzarella cheese, and walnut. Or choose from our variety of other special Tiramisu. Don't forget to add a drink and a Dessert to complete your meal. For a limited time, enjoy our Promotion of 10%. Hurry, this offer won't last long! Order 2 days in advance",
-        "Categories": ["All", "Alcoholic", "Chocolate", "Promotion", "Special"],
-        "Products": [
-        {"Id": "CC31",
-            "ProductName": "Classic Rum Tiramisu",
-            "ProductImg" : "images/img31.jpg",
-            "Description": "Our classic pizza, made with tomato sauce, mozzarella cheese, and basil. Served with a drink of your choice.",
-            "Categories": ["All", "Alcoholic", "Promotion"],
-            "Price": 28.50,
-            "Options": {
-            "Dessert": [ { "No Thanks": 0.00, "ChengDo": 2.00 , "BoBo ChaCha": 3.20 } ], 
-            "AddOn": [ { "No Thanks": 0.00, "Nuggets": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-            },
-            "Diet": ["Vegetarian"]
-        },
-        {"Id": "CC32",
-            "ProductName": "Nutty Tiramisu",
-            "ProductImg" : "images/img32.jpg",
-            "Description": "A spicy pizza, made with mixed nuts, mozzarella cheese, and sour creame. Served with a drink of your choice.",
-            "Categories": ["All", "Special"],
-            "Price": 20.50,
-            "Options": {
-            "Drink": [ { "No Thanks": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ] 
-            }, 
-            "Diet": ["HighProtein"] 
-        },
-        {"Id": "CC33", 
-            "ProductName": "Durian Tiramisu",
-            "ProductImg" : "images/img33.jpg",
-            "Description": "Our most addaciuos creation, made with durian, mozzarella cheese, and peanuts. Served with a drink of your choice.",
-            "Categories": ["All", "Special"],
-            "Price": 25.55,
-            "Options": {
-            "Dessert": [ { "No Thanks": 0.00, "ChengDo": 2.00 , "BoBo ChaCha": 3.20 } ], 
-            "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-            },
-            "Diet": ["HighProtein"]
-        },
-        {"Id": "CC34", 
-            "ProductName": "Chocolate Tiramisu",
-            "ProductImg" : "images/img34.jpg",
-            "Description": "Our favorite creation, made with chocolate, mozzarella cheese, and peanuts. Served with a drink of your choice.",
-            "Categories": ["All", "Chocolate"],
-            "Price": 21.00,
-            "Options": {
-            "Dessert": [ { "No Thanks": 0.00, "ChengDo": 2.00 , "BoBo ChaCha": 3.20 } ], 
-            "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-            },
-            "Diet": ["HighProtein"]
-        },
-        {
-            "Id": "CC35",
-            "ProductName": "Salad",
-            "ProductImg" : "images/img8.jpg",
-            "Description": "A fresh and healthy salad, made with lettuce, tomato, cucumber, carrot, cheese, and your choice of dressing. Served with a drink of your choice.",
-            "Categories": ["All", "Special"],
-            "Price": 5.60,
-            "Options": {
-            "Drink": [ { "No Thanks": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-            "Dressing": [ { "No Thanks": 0.00 , "Garden Greens": 0.50 , "Lettuce & Kale": 0.50 , "Caesar Sald": 0.50  } ],
-            "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-            },
-            "Diet": ["Vegetarian", "LowCarbo/Sugar"]
-        },
-       {"Id": "DD42",
-        "ProductName": "Wrap",
-        "ProductImg" : "images/DD42-ChickenWrap.webp",
-        "Description": "A delicious wrap, made with your choice of tortilla, meat, cheese, and Vegetables. Served with fries and a drink of your choice.",
-        "Categories": ["All", "Promotion"],
-        "Price": 5.85,
-        "Options": {
-         "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-         "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-          "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
-          "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-        },
-        "Diet": ["HighProtein"]
-      }
-        ],
-    "OperationHours": {
-      "weekday": "Monday to Sunday",
-      "startTime": "8:00 AM",
-      "endTime": "10:00 PM"
-    }
-  },      
-  {"StoreId": "ABC123",
-    "StoreUnique": "Sr789EastWestFusion",
-    "StoreName": "East West Fusion",
-    "StoreAddress": "789 Scotts Road, Far East Shopping Plaza, Singapore 123456",
-    "LogoImg": "images/logo4.jpg",
-    "StoreBannerImg": "images/StoreBanner4.jpg",
-    "StoreWebsite": "www.bingspizza.com",
-    "GeoLocation":{"Lat": 1.387353973, "Lon": 103.8064571},
-    "StorePhone": "+6592299338",
-    "PromotionMessage": "Welcome to East West Fusion, where we serve the best food in town! Try our classic Margherita Baguette, made with tomato sauce, mozzarella cheese, and basil. Or choose from our variety of other pizzas, pastas, salads, and sides. Don't forget to add a drink and a Dessert to complete your meal. For a limited time, enjoy our Promotion of buy one get one free on any pizza. Hurry, this offer won't last long!",
-    "Categories": ["All", "Lunch", "Dinner", "Promotion", "Special"],
-    "Products": [
-      {"Id": "DD41",
-        "ProductName": "Margherita Baguette",
-        "ProductImg" : "images/DD41.jpg",
-        "Description": "Our classic Baguette, made with tomato sauce, mozzarella cheese, and basil. Served with a drink of your choice.",
-        "Categories": ["All", "Lunch", "Dinner", "Promotion"],
-        "Price": 5.80,
-        "Options": {
-          "Drink": [ { "No Thanks": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-          "Size": [ { "Small": 0.00 , "Medium": 5.00 , "Large": 7.00 } ],
-          "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-        },
-        "Diet": ["HighProtein"]
-       },
-       {"Id": "DD42",
-        "ProductName": "Wrap",
-        "ProductImg" : "images/DD42-ChickenWrap.webp",
-        "Description": "A delicious wrap, made with your choice of tortilla, meat, cheese, and Vegetables. Served with fries and a drink of your choice.",
-        "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
-        "Price": 5.85,
-        "Options": {
-         "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-         "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-          "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
-          "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-        },
-        "Diet": ["HighProtein"]
-      },
-      {
-        "Id": "DD43",
-        "ProductName": "Classic Pancakes",
-        "ProductImg" : "images/DD43.jpg",
-        "Description": "Delicious fluffy pancakes served with maple syrup.",
-        "Price": 5.90,
-        "Options": {
-          "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-          "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-          "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
-          "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 0.50 , "Lettuce & Kale": 0.50 , "Caesar Sald": 0.50 } ],
-           "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-         },
-        "Categories": ["Breakfast"]
-      },
-      {
-        "Id": "DD44",
-        "ProductName": "Chicken Caesar Salad",
-        "ProductImg" : "images/DD44.jpg",
-        "Description": "Fresh romaine lettuce topped with grilled chicken and Caesar dressing.",
-        "Price": 8.88,
-        "Options": {
-          "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-          "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
-          "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 0.50 , "Lettuce & Kale": 0.50 , "Caesar Sald": 0.50 } ],
-           "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-         },
-        "Categories": ["Lunch"]
-      },
-      {
-        "Id": "DD45",
-        "ProductName": "Special Dessert Platter",
-        "ProductImg" : "images/DD45.jpg",
-        "Description": "A delightful assortment of Desserts for sharing.",
-        "Price": 6.12,
-        "Options": {
-          "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-           "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
-          "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
-          "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 1.00 , "Lettuce & Kale": 0.50 , "Caesar Sald": 0.50 } ],
-           "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-         },
-        "Categories": ["Special", "Dinner"]
-      },
-      {
-          "Id": "DD46",
-          "ProductName": "Avocado Toast",
-          "ProductImg" : "images/DD46.jpg",
-          "Description": "Sliced avocados on toasted whole-grain Bread.",
-          "Price": 6.15,
-          "Options": {
-            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-             "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
-             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-           },
-          "Categories": ["Breakfast"]
-        },
-        {
-          "Id": "DD47",
-          "ProductName": "Chicken Pesto Panini",
-          "ProductImg" : "images/DD47.jpg",
-          "Description": "Grilled chicken, pesto sauce, and mozzarella on ciabatta.",
-          "Price": 6.22,
-          "Options": {
-            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-             "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
-            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
-             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-           },
-          "Categories": ["Lunch"]
-        },
-        {
-          "Id": "DD48",
-          "ProductName": "Spaghetti Bolognese",
-          "ProductImg" : "images/DD48.jpg",
-          "Description": "Classic Italian pasta with hearty meat sauce.",
-          "Price": 6.23,
-          "Options": {
-            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-             "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
-             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-           },
-          "Categories": ["Dinner"]
-        },
-        {
-          "Id": "DD49",
-          "ProductName": "Fruit Smoothie",
-          "ProductImg" : "images/DD49.jpg",
-          "Description": "Refreshing mixed fruit smoothie for a limited time!",
-          "Price": 6.24,
-          "Options": {
-            "Snack": [ { "No Thanks": 0.00 , "Muah Chee": 4.00 , "Satay5 Sticks": 2.50 , "Peanut Toast": 1.00 } ],
-            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 1.00 , "Parmesan": 1.50 , "Cheddar": 0.50 } ],
-            "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 0.50 , "Lettuce & Kale": 0.50 , "Caesar Salad": 0.50 }]
-           },
-          "Categories": ["Promotion", "Lunch"]
-        },
-        {
-          "Id": "DD50",
-          "ProductName": "Chef's Special Steak",
-          "ProductImg" : "images/DD50.jpg",
-          "Description": "Prime ribeye steak with chef's secret seasoning.",
-          "Price": 6.26,
-          "Options": {
-            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-            "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 0.50 , "Lettuce & Kale": 0.50 , "Caesar Salad": 0.50 } ],
-             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-           },
-          "Categories": ["Special", "Dinner"]
-        },
-        {
-          "Id": "DD51",
-          "ProductName": "Durian Cake",
-          "ProductImg" : "images/DD51.jpg",
-          "Description": "Indulgent durian cake with creamy Mao San Wang.",
-          "Price": 6.28,
-          "Options": {
-            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "CokeZero 250mL": 1.00 } ],
-            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-           },
-          "Categories": ["Special", "Dinner"]
-        },
-        {
-          "Id": "DD52",
-          "ProductName": "Chocolate Lava Cake",
-          "ProductImg" : "images/DD52.jpg",
-          "Description": "Indulgent chocolate cake with a gooey molten center.",
-          "Price": 6.34,
-          "Options": {
-            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "CokeZero 250mL": 1.00 } ],
-            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-           },
-          "Categories": ["Special", "Dessert"]
-        },
-      {
-      "Id": "DD53",
-      "ProductName": "Greek Yogurt Parfait",
-      "ProductImg" : "images/DD53.jpg",
-      "Description": "Layers of Greek yogurt, granola, and fresh berries.",
-      "Price": 5.36,
-      "Options": {
-        "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "Coke Zero 250mL": 0.50 } ],
-        "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-         "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-       },
-      "Categories": ["Breakfast", "Vegetarian"]
-      },
-      {
-          "Id": "DD54",
-          "ProductName": "Shrimp Laksa",
-          "ProductImg" : "images/DD54.jpg",
-          "Description": "Pigeon eggs, fresh shrimps, and basil with coconut milk.",
-          "Price": 4.37,
-          "Options": {
-            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "CokeZero 250mL": 1.00 } ],
-            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-           },
-          "Categories": ["Lunch", "Vegetarian"]
-      },
-      {
-          "Id": "DD55",
-          "ProductName": "Shrimp Scampi Pasta",
-          "ProductImg" : "images/DD55.jpg",
-          "Description": "Linguine with succulent shrimp in a garlic and lemon sauce.",
-          "Price": 4.61,
-          "Options": {
-            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "CokeZero 250mL": 1.00 } ],
-             "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
-            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
-             "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-           },
-          "Categories": ["Dinner", "Seafood"]
-      },
-      {
-          "Id": "DD56",
-          "ProductName": "Mango Tango Smoothie",
-          "ProductImg" : "images/DD56.jpg",
-          "Description": "Tropical blend of mango, pineapple, and coconut milk.",
-          "Price": 4.64,
-          "Options": {
-            "Snack": [ { "No Thanks": 0.00 , "Muah Chee": 4.00 , "Satay5 Sticks": 2.50 , "Peanut Toast": 1.00 } ],
-            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 1.00 , "Parmesan": 1.50 , "Cheddar": 0.50 } ],
-            "Vegetables": [ { "No Thanks": 0.00 , "Garden Greens": 0.50 , "Lettuce & Kale": 0.50 , "Caesar Salad": 0.50 }]
-           },
-          "Categories": ["Promotion", "Beverage"]
-      },
-      {
-          "Id": "DD57",
-          "ProductName": "Vegetarian Quinoa Bowl",
-          "ProductImg" : "images/DD57.jpg",
-          "Description": "Quinoa, roasted Vegetables, and tahini dressing.",
-          "Price": 4.67,
-          "Options": {
-            "Drink": [ { "Plain Water": 0.00 , "Mango Juice": 4.00 , "Lime Juice": 0.50 , "CokeZero 250mL": 0.50 } ],
-            "Bread": [ { "No Thanks": 0.00 , "Italian": 0.50 , "Oat": 0.50 , "Grain 100%": 0.50 } ],
-             "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
-            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 1.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
-            "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Poach Egg": 1.20 } ]
-           },
-          "Categories": ["Special", "Vegetarian"]
-      }
-      ],
-    "OperationHours": {
-      "weekday": "Monday to Sunday",
-      "startTime": "8:00 AM",
-      "endTime": "10:00 PM"
-     }
-  }
-]   
-    const AMKLat = 1.3692189152416219;
-    const AMKLon = 103.85013933048792;
-    //localStorage.removeItem('storeidcurr+cart');
-    let store= null;
-    //navigate based on url query like index.html?StoreID=AB1234&ProductID=DD57
-    const urlParams = new URLSearchParams(window.location.search);
-    try {
-      //const urlParams = new URLSearchParams(window.location.search);
-      const storeIdPara = urlParams.get('StoreID');
-      //console.log(storeIdPara);
-      //const productIds = urlParams.get('ProductID').split(',');//in case of ProductID=A12,B23,C34
-      // Check if StoreID parameters is present
-      if (!storeIdPara) {
-        throw new Error('Missing StoreID in URL');
-      }
-      // Find the store object
-      store = stores.find(store => store.StoreId === storeIdPara);
-      if (!store) {
-        throw new Error('Store with ID ' + storeId + ' not found');
-      }
-    } catch (error) {
-      // Handle error gracefully
-      //alert('Error: ' + error.message);
-      store = stores[0];//if no StoreID, then serve default first store
-    }
-    const storeIDCurr=store.StoreId;//current store ID
-    console.log(haverDist(store.GeoLocation.Lat,store.GeoLocation.Lon,AMKLat,AMKLon));
-    //console.log(storeIDCurr);
-    const products=store.Products;
-    const storeFront = document.getElementById("store-front"); 
-    const cartTotalEle = document.getElementById("cart-total"); 
-    const cartCountEle = document.getElementById("cart-count");
-    const storeMsgEle = document.getElementById("store-msg"); 
-    storeFront.innerHTML=`<img src="${store.StoreBannerImg}" id="store-banner">
-      <div id="store-info">
-        <a href="${store.StoreWebsite}" id="store-web">${store.StoreWebsite}</a>
-        <a href="https://wa.me/${store.StorePhone}" id="store-wsphone">Contact us on WhatsApp</a>
-        <span id="store-address"> ${store.StoreAddress}</span>
-        <span id="store-address"> ${store.StoreUnique}</span>
-      </div>  
-      <img src="${store.LogoImg}" id="store-logo"> `
-    //get store messages
-    storeMsgEle.innerHTML = store.PromotionMessage;
-    //cart icon click event
-    document.getElementById('cart-icon').addEventListener('click', function() {
-      var cart = document.getElementById('cart'); 
-      var checkOutEle=document.getElementById("checkOutBtn");
-      var cartClose=  document.getElementById('cart-close');   
-      if (cart.style.display === 'none') {
-        cart.style.display = 'block';
-        cartClose.style.display = 'block';
-        checkOutEle.style.display='block';
-        window.scrollTo(0, 0);
-        } else {
-          cart.style.display = 'none';
-          cartClose.style.display = 'none'
-          checkOutEle.style.display='none';
-          document.getElementById("formContainer").style.display = "none";
-          //displayCartDetails();
-          window.scrollTo(0, 0);
-        } 
-    });
-    var cart = JSON.parse(localStorage.getItem(storeIDCurr+"Cart")) || [];
-    if (cart.length>0.1){
-      displayCartDetails();
-    }
-    //console.log(cart);
-    //localStorage.removeItem('cart');
-    // Function to add product to the cart
-    function addToCart(productId) {
-      var selectedOptions = document.querySelectorAll(`.option-radio:checked`);
-      var product = products.find(p => p.Id === productId);
-      var totalPrice = product.Price;
-      // Create an array to store selected options
-      var selectedOptionsArray = [];
-      // Iterate through selected radio buttons and add their details
-      selectedOptions.forEach(option => {
-        selectedOptionsArray.push({
-          type: option.getAttribute("data-type"),
-          name: option.getAttribute("data-name"),
-          price: parseFloat(option.getAttribute("data-price"))
+    ];
+
+    let cart = [];
+    let currentStoreId = '';
+    let selectedOptions = {}; // To store selected options for the currently active product
+
+    // --- Utility Functions (could be in util.js, but kept here for context) ---
+    function getUrlParams() {
+        const params = {};
+        window.location.search.substring(1).split('&').forEach(param => {
+            const pair = param.split('=');
+            params[pair[0]] = pair[1];
         });
-        // Add the price to the total
-        totalPrice += parseFloat(option.getAttribute("data-price"));
-      });
-
-      // Create or update cart data in local storage
-      var cart = JSON.parse(localStorage.getItem(storeIDCurr+"Cart")) || [];
-      cart.push({ product, quantity: 1, totalPrice, selectedOptions: selectedOptionsArray });
-      //console.log(cartText);
-      localStorage.setItem(storeIDCurr+"Cart", JSON.stringify(cart));
-      toggleOption(productId,"none");
-      // Display updated cart details
-      displayCartDetails();
-      //window.scrollTo(0, 0);
-      /*const button = document.querySelector(".add2Cart");
-      const messageBox = document.querySelector(".message-box");
-      const buttonWidth = button.offsetWidth;// Store original button dimensions
-      const buttonHeight = button.offsetHeight;
-      button.classList.add("moving");// Add the `moving` class for animation
-      // Set button width variable for animation
-      document.documentElement.style.setProperty("--button-width", `${buttonWidth}px`);
-      messageBox.style.display = "block";
-      setTimeout(() => { // Show message box after animation ends
-        button.classList.remove("moving");
-        messageBox.style.display = "none";
-      }, 2000);*/
-    }
-    // Function to display cart details
-    function displayCartDetails() {
-      //document.getElementById("checkOutBtn").style.display='block';
-      var cartDiv = document.getElementById("cart");
-      var cart = JSON.parse(localStorage.getItem(storeIDCurr+"Cart")) || [];
-      //var cartProducts = cart[2];
-      var grandTotal = 0;
-      var cartCount = 0;
-      cartDiv.innerHTML = "<h2>"+store.StoreUnique+"</h2>"
-      cartDiv.innerHTML += `<h3 id="cart-grand-total">Grand Total:  $</h3>
-          `;
-      console.log(cart);
-      // Loop through cart items and display details
-      cart.forEach((item, index) => {
-        cartDiv.innerHTML += `
-          <div class="ordered">
-            <p>${item.product.Id}>${item.product.ProductName} - Quantity: ${item.quantity}</p>
-            <p>Total Price: $${item.totalPrice.toFixed(2)}</p>
-            <p>Product Price: $${item.product.Price.toFixed(2)}</p>
-            <p>Selected Options:</p>
-            <ul>
-              ${displaySelectedOptions(item.selectedOptions)}
-            </ul>
-            <button onclick="updateQuantity(${index}, 'increase')">+</button>
-            <button onclick="updateQuantity(${index}, 'decrease')">&ndash;</button>
-            <button onclick="deleteItem(${index})">Delete</button>
-          </div>
-        `;
-        grandTotal += item.totalPrice;
-        cartCount += item.quantity;
-        //console.log(item.quantity);
-      });
-      let grandElem=document.getElementById("cart-grand-total");
-      grandElem.innerHTML += grandTotal.toFixed(2);
-      cartTotalEle.innerHTML = grandTotal.toFixed(2);
-      cartCountEle.innerHTML = cartCount; 
+        return params;
     }
 
-    // Get references to the elements
-    const deliveryOptionsEle = document.getElementById("deliveryOptions");
-
-    var requiredByEle = document.getElementById("dateTimeInput");
-    requiredByEle.disabled = true;
-    // Function to handle the state of dateTimeInput based on deliveryOptions selection
-    function updateMeetupDateTimeState() {
-      // Get the text content of the currently selected option in deliveryOptions
-      const selectedOptionText = deliveryOptionsEle.options[deliveryOptionsEle.selectedIndex].textContent;
-
-      // Check if the selected option text contains "MeetUp Marsiling"
-      if (selectedOptionText.includes("MeetUp Marsiling")) {
-          requiredByEle.disabled = false; // Enable the dateTimeInput select element
-          populateTimeOptions();
-      } else {
-          requiredByEle.disabled = true; // Disable the hourInput select
-          // Optionally, reset the hourInput to its placeholder when disabled
-          requiredByEle.value = ""; 
-      }
+    function generateOrderNo() {
+        const now = new Date();
+        const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
+        const timeStr = now.toTimeString().slice(0, 8).replace(/:/g, '');
+        return 'ORD' + dateStr + timeStr;
     }
 
-    // Attach an event listener to the deliveryOptions select
-    deliveryOptionsEle.addEventListener("change", updateMeetupDateTimeState);
-
-    function populateTimeOptions() {
-      const hourInput = document.getElementById("dateTimeInput");
-      hourInput.innerHTML = '<option value="" disabled selected>Select a date and time</option>'; // Clear existing options
-
-      const now = new Date();
-      let currentOptionTime = new Date(now.getTime() + 20 * 60 * 1000); // Start 20 minutes from now
-
-      const allowedHours = [12, 13, 18, 19, 20, 21]; // 12 PM, 1 PM, 6 PM, 7 PM, 8 PM, 9 PM
-
-      for (let i = 0; i < 36; i++) {
-          let hour = currentOptionTime.getHours();
-          let minute = currentOptionTime.getMinutes();
-
-          // Round up to the next 30-minute interval (0 or 30)
-          if (minute > 30) {
-              currentOptionTime.setHours(hour + 1);
-              currentOptionTime.setMinutes(0);
-          } else if (minute > 0 && minute <= 30) {
-              currentOptionTime.setMinutes(30);
-          } else if (minute < 0) { // Should not happen but for safety
-              currentOptionTime.setMinutes(0);
-          }
-
-          hour = currentOptionTime.getHours();
-          minute = currentOptionTime.getMinutes();
-          
-          // Adjust for allowed hours
-          while (!allowedHours.includes(hour) || (hour === 21 && minute > 30)) {
-              if (hour >= 21 && minute >= 30) { // If past 9:30 PM, go to next day 12 PM
-                  currentOptionTime.setDate(currentOptionTime.getDate() + 1);
-                  currentOptionTime.setHours(12);
-                  currentOptionTime.setMinutes(0);
-              } else { // Increment hour until an allowed hour is found
-                  currentOptionTime.setHours(hour + 1);
-                  currentOptionTime.setMinutes(0); // Reset minutes when changing hour
-              }
-              hour = currentOptionTime.getHours();
-              minute = currentOptionTime.getMinutes();
-          }
-
-          // Format the date and time
-          const day = currentOptionTime.getDate();
-          const month = currentOptionTime.toLocaleString('en-US', {
-              month: 'long'
-          });
-          const year = currentOptionTime.getFullYear();
-          const formattedHour = hour > 12 ? hour - 12 : hour;
-          const ampm = hour >= 12 ? 'pm' : 'am';
-          const formattedMinute = minute.toString().padStart(2, '0');
-
-          const optionText = `${day} ${month} ${year} ${formattedHour}:${formattedMinute}${ampm}`;
-          const optionValue = optionText;//currentOptionTime.toISOString(); // Use ISO string for value for easy parsing later
-
-          const option = document.createElement("option");
-          option.value = optionValue;
-          option.textContent = optionText;
-          hourInput.appendChild(option);
-
-          // Increment for the next option (30 minutes)
-          currentOptionTime.setMinutes(currentOptionTime.getMinutes() + 30);
-      }
-    }
-
-    //function to checkout
-    function checkout() {
-      //get time and delivery options
-      if (parseInt(cartCountEle.textContent)<0.1){
-          alert("No items in your cart");
-          return;
-      } 
-      document.getElementById("formContainer").style.display = "block";
-      //populateTimeOptions();
-      //requiredEle is declared as gloabl in above
-      //requiredByEle.disabled = false;//initially disable the dateTimeInput select
-      /*var hourEle=document.getElementById("hourInput");
-      var minEle=document.getElementById("minInput");
-      var now = new Date();
-      var currHour=now.getHours()-5;
-      if (currHour<0){
-        currHour=0;
-      };
-      var currMin=Math.ceil(now.getMinutes()/5);
-      hourEle.selectedIndex=currHour;
-      minEle.selectedIndex=currMin;*/
-      //Listening to submit form for date time
-      document.getElementById("dateTimeForm").addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent default form submission
-        var message ="";
-        //var dateValue = document.getElementById("dateInput").value;
-        var requiredByText = document.getElementById("dateTimeInput").value;
-        //var minValue = minEle.value;
-        var delivery = document.getElementById("deliveryOptions").value;
-        console.log(requiredByText)
-        //var selectedDate = new Date(hourValue);    
-        var timeDeliveryRequired = {
-          //"date": dateValue,
-          "time": requiredByText,//+minValue,
-          "delivery": delivery
-        };
-        console.log(timeDeliveryRequired);
-        //close user input
-        document.getElementById("formContainer").style.display = "none";
-        // prepare whatsapp message
-        console.log(parseInt(cartCountEle.textContent));
-        if (parseInt(cartCountEle.textContent)>0.9){
-         /* alert("No items in your cart");
-        } else {*/
-          let order="Order ID: "+getOrderCode()+"\n from ";
-          // Get the "cart" element
-          var cartElement = document.getElementById("cart");
-          console.log(cartElement);
-          // Function to extract text from an element and its children
-          function getTextContent(element) {
-            let text = "";
-            for (const child of element.childNodes) {
-              //console.log("child.nodeType= "+child.nodeType +"; Node.TEXT_NODE= "+Node.TEXT_NODE+" ;child.nodeName= "+child.nodeName);
-              if (child.nodeType === Node.TEXT_NODE) {
-                //console.log(child.textContent)
-                text += child.textContent.trim();//+"%0A"; //replace(/\s+/g, " ").trim();
-              } else if (child.nodeName.toLowerCase() !== "button") {
-                text += getTextContent(child) + "\n";
-              }
-            }
-            return text;
-          }
-          // Get order code and combine with text from the cart element
-          const cartText = order+getTextContent(cartElement);
-          // Create prompt message with line breaks added
-          message+=cartText.replace(/\s+/g, " ").trim(); // Remove unnecessary whitespace
-          message+="\n Required on "+timeDeliveryRequired.time+" Delivery: "+timeDeliveryRequired.delivery
-          // Construct the pre-built WhatsApp link with the encoded message
-          const encodedMessage = encodeURIComponent(message);
-          const whatsappLink = `https://wa.me/${store.StorePhone}?text=${encodedMessage}`;
-          // Open the link using window.location.href in the same tab
-          //window.location.href = whatsappLink;  
-          // Open the link in a new tab using window.open()
-          window.open(whatsappLink, "_blank")
-          // remove item in localStorage and cart element
-          localStorage.removeItem(storeIDCurr+'Cart');
-          const orderedElements = document.querySelectorAll('.ordered');
-          orderedElements.forEach((element) => {
-            element.remove();
-          });
-          cartCountEle.innerHTML="0";
-          cartTotalEle.innerHTML="0";
-          let grandElem=document.getElementById("cart-grand-total");
-          grandElem.innerHTML="$0";
-        } //end whatsapp check out
-        document.getElementById("checkOutBtn").style.display = "none";
-        document.getElementById("cart").style.display = "none";
-        document.getElementById("cart-close").style.display = "none";
-      });
-      /*display prompt for user to custom input time
-      document.getElementById("timeInput").addEventListener("change", function() {
-        var userTimeInput = document.getElementById("userTimeInput");
-        if (this.value === "userSelect") {
-          userTimeInput.style.display = "inline";
-          userTimeInput.required = true;
-        } else {
-          userTimeInput.style.display = "none";
-          userTimeInput.required = false;
-        }
-      });*/
-      
-    }
-  
-    // Function to display selected options in the cart
-    function displaySelectedOptions(selectedOptions) {
-      var selectedOptionsHTML = "";
-
-      // Check if selectedOptions is an array and has items
-      if (selectedOptions && selectedOptions.length) {
-        selectedOptions.forEach(option => {
-          selectedOptionsHTML += `<li>${option.type} - ${option.name} ($${option.price.toFixed(2)})</li>`;
-        });
-      } else {
-        selectedOptionsHTML = "<li>No selected options</li>";
-      }
-
-      return selectedOptionsHTML;
-    }
-    // Function to update quantity in the cart
-    function updateQuantity(index, action) {
-      var cart = JSON.parse(localStorage.getItem(storeIDCurr+"Cart")) || [];
-
-      if (action === "increase") {
-        cart[index].quantity++;
-      } else if (action === "decrease" && cart[index].quantity > 1) {
-        cart[index].quantity--;
-      }
-      // Update total price based on quantity and selected options
-      var product = cart[index].product;
-      var selectedOptions = cart[index].selectedOptions || [];
-      var optionsPrice = selectedOptions.reduce((total, option) => total + parseFloat(option.price), 0);
-      cart[index].totalPrice = (product.Price + optionsPrice) * cart[index].quantity;
-
-      // Update cart data in local storage
-      localStorage.setItem(storeIDCurr+"Cart", JSON.stringify(cart));
-
-      // Display updated cart details
-      displayCartDetails();
-    }
-
-      // Function to delete item from the cart
-    function deleteItem(index) {
-      var cart = JSON.parse(localStorage.getItem(storeIDCurr+"Cart")) || [];
-      // Remove the item at the specified index
-      cart.splice(index, 1);
-      // Update cart data in local storage
-      localStorage.setItem(storeIDCurr+"Cart", JSON.stringify(cart));
-      // Display updated cart details
-      displayCartDetails();
-    }
-    //displayCartDetails();
-    //initialize product
-    document.addEventListener("DOMContentLoaded", function () {
-      const categoryNav = document.getElementById("category-nav");
-      const productContainer = document.getElementById("product-container");
-      // Extract unique categories from product data
-      const categories = Array.from(
-          new Set(products.flatMap(product => product.Categories))
-      );
-      categories.shift();//remove empty top element
-      categories.unshift("All");//add All to top element of array categories
-      // Create category navigation tabs
-      categories.forEach(category => {
-          const tab = document.createElement("a");
-          tab.href = "#";
-          tab.textContent = category;
-          tab.addEventListener("click", () => filterProducts(category));
-          categoryNav.appendChild(tab);
-      });
-      // Display all products initially
-      displayProducts(products);
-
-      // Function to filter and display products based on selected category
-      function filterProducts(category) {
-        if (category=="All"){
-                const filteredProducts = products;
-                displayProducts(filteredProducts);
-        } else {
-            const filteredProducts = products.filter(product =>
-                product.Categories.includes(category)
-            );
-            displayProducts(filteredProducts);
-        }
-      }
-
-      // Function to display products
-      function displayProducts(productsArray) {
-        productContainer.innerHTML = "";
-        // Loop through products and display details
-        productsArray.forEach(product => {
-          const card = document.createElement("div");
-          card.classList.add("product-card");
-          const productId = product.Id;
-          //populate product card
-          card.innerHTML = `
-            <h3 style="display:inline-block;">${productId}</h3>
-            <h3 style="display:inline-block;">${product.ProductName}</h3>
-            <img src ="${product.ProductImg}" alt="${product.ProductName}" class="product-img">
-            <p>${product.Description}</p>
-            <p>Price: $${product.Price.toFixed(2)}</p>
-            <button class="toggleOption" onclick="toggleOption('${productId}')">Options</button>
-            <div id="options-${productId}" class="options-container">`
-          for (const optionType in product.Options) {
-            card.innerHTML += `<h4 style="display: none;">${optionType}:</h4>`;
-            product.Options[optionType].forEach(item => {
-              for (const name in item) {
-                //console.log("  " + name + ": " + item[name]);
-                var optionName = name;
-                var optionPrice = item[name];
-                card.innerHTML += `
-                <label style="display: none;">>
-                <input type="radio" class="option-radio" name="${optionType}" data-product-id="${product.Id}" data-type="${optionType}" data-name="${optionName}" data-price="${optionPrice}">
-                ${optionName} - $${optionPrice.toFixed(2)}
-                </label>
-                </div>`;
-                }
-              })
-          }//close for (const optionType in product.Options) 
-          card.innerHTML += `<button class="add2Cart" onclick="addToCart('${productId}')">Add to Cart</button>`;
-          productContainer.appendChild(card);
-        });//closing productsArray.forEach
-        const add2CartButtons = document.querySelectorAll('.add2Cart');
-        add2CartButtons.forEach(button => {
-          button.addEventListener('click', event => {
-            // Add the "clicked" class for animation
-            button.classList.add('clicked');
-            const messageBox = document.querySelector(".message-box");
-            messageBox.style.display = "flex";
-            //console.log(messageBox);
-            // Remove the "clicked" class after animation ends (optional)
-            setTimeout(() => {
-              button.classList.remove('clicked');
-            }, 1000); // Adjust 1000ms to match your animation duration
-            setTimeout(() => {
-              messageBox.style.display = "none";
-            }, 2200); // Adjust 1000ms to match your animation duration
-          });
-        }); 
-      }//closing for displayProducts
-      //Finding the Product Card Element based on URL ProductID:
-      try{
-        const productId = urlParams.get('ProductID');
-        // Check if both parameters are present
-        if (productId==null) {
-          throw new Error('Missing productID in URL');
-        }
-        // Find the product card element
-        function findProductCard(productId) {
-          const productCards = document.querySelectorAll('.product-card');
-          for (const card of productCards) {
+    function getProductCard(productId) {
+        const productCards = document.querySelectorAll('.product-card');
+        for (const card of productCards) {
             const h3ProductID = card.querySelector('h3').textContent.trim();
             if (h3ProductID === productId) {
-              return card;
+                return card;
             }
-          }
-          return null;
         }
-        const productCard = findProductCard(productId);
-        if (!productCard) {
-          throw new Error('Product with ID ' + productId + ' not found');
+        return null;
+    }
+
+    // --- Cart Management Functions ---
+    function saveCart() {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        localStorage.setItem('cartTotal', document.getElementById('cart-total').textContent);
+        localStorage.setItem('cartCount', document.getElementById('cart-count').textContent);
+    }
+
+    function loadCart() {
+        const storedCart = localStorage.getItem('cart');
+        const storedCartTotal = localStorage.getItem('cartTotal');
+        const storedCartCount = localStorage.getItem('cartCount');
+
+        if (storedCart) {
+            cart = JSON.parse(storedCart);
+            renderCartContent(); // Render initial cart content
+        }
+        if (storedCartTotal) {
+            document.getElementById('cart-total').textContent = storedCartTotal;
+        }
+        if (storedCartCount) {
+            document.getElementById('cart-count').textContent = storedCartCount;
+        }
+    }
+
+    function renderCartContent() {
+        const cartDiv = document.getElementById('cart');
+        cartDiv.innerHTML = ''; // Clear previous content
+        
+        const currentStore = stores.find(s => s.StoreId === currentStoreId);
+        
+        let grandTotal = 0;
+
+        if (cart.length === 0) {
+            cartDiv.innerHTML = `
+                <div class="cart-header-buttons">
+                    <button id="go-back-shopping" onclick="toggleCart()">Go Back Shopping</button>
+                    <p id="cart-close">X</p>
+                </div>
+                <p>Your cart is empty.</p>
+            `;
+        } else {
+            let cartItemsHtml = '';
+            cart.forEach((item, index) => {
+                const itemTotal = (item.price + item.optionsTotal) * item.quantity; 
+                grandTotal += itemTotal;
+
+                cartItemsHtml += `
+                    <div class="cart-item">
+                        <p>${item.productName} ($${item.price.toFixed(2)} / unit)</p>
+                        <div class="cart-item-actions">
+                            <div class="cart-item-qty">
+                                <button class="decrease-qty-btn" data-index="${index}">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="increase-qty-btn" data-index="${index}">+</button>
+                            </div>
+                            <button class="remove-from-cart-btn" data-index="${index}">Remove</button>
+                        </div>
+                        <ul>
+                            ${Object.entries(item.selectedOptions).map(([group, options]) => {
+                                if (Array.isArray(options)) {
+                                    return options.map(opt => {
+                                        if (opt.name !== 'No Thanks') {
+                                            return `<li>${group}: ${opt.name} ($${opt.price.toFixed(2)})</li>`;
+                                        }
+                                        return '';
+                                    }).join('');
+                                } else if (options.name && options.price !== undefined) { 
+                                    if (options.name !== 'No Thanks') {
+                                        return `<li>${group}: ${options.name} ($${options.price.toFixed(2)})</li>`;
+                                    }
+                                }
+                                return ''; 
+                            }).join('')}
+                        </ul>
+                        <p>Item Total: $${itemTotal.toFixed(2)}</p>
+                        <hr>
+                    </div>
+                `;
+            });
+
+            cartDiv.innerHTML = `
+                <div class="cart-header-buttons">
+                    <button id="proceed-to-checkout-btn">Proceed to Checkout</button>
+                    <p id="cart-close">X</p>
+                </div>
+                <h3>Grand Total: $${grandTotal.toFixed(2)}</h3>
+                ${cartItemsHtml}
+            `;
+            
+            document.getElementById('proceed-to-checkout-btn').addEventListener('click', renderCheckoutContent);
         }
         
-        // Scrolling to the product card
-        productCard.scrollIntoView({ behavior: 'smooth' }); 
-      } catch (error) {
-        // Handle error gracefully
-        console.log('Error: ' + error.message);
-        // You can also do other things like logging the error to a server or redirecting to a different page.
-      }           
-    });//closing document.addEventListener 
-    function getOrderCode() {
-      var rdmString = "";
-      for( ; rdmString.length < 4; rdmString  += Math.random().toString(36).substr(2));
-      var d = new Date();
-      var mth=("0" + d.getDate()).slice(-2);
-      var date=("0" + (d.getMonth()+1)).slice(-2);
-      //var dateStr = String('-'+today.getDate()+today.toLocaleString('default', { month: 'short' }));
-      var dateStr = String('-'+mth+date+ d.getHours()+d.getMinutes());
-      return rdmString.substr(0, 4).toLocaleUpperCase()+dateStr 
+        document.getElementById('cart-count').textContent = cart.length;
+        document.getElementById('cart-total').textContent = `$${grandTotal.toFixed(2)}`;
+        saveCart();
+
+        // Add event listeners for remove, increase, decrease buttons
+        document.querySelectorAll('.remove-from-cart-btn').forEach(button => {
+            button.addEventListener('click', removeFromCart);
+        });
+        document.querySelectorAll('.increase-qty-btn').forEach(button => {
+            button.addEventListener('click', increaseQuantity);
+        });
+        document.querySelectorAll('.decrease-qty-btn').forEach(button => {
+            button.addEventListener('click', decreaseQuantity);
+        });
+
+        // Re-attach listener for cart close button
+        document.getElementById('cart-close').addEventListener('click', toggleCart);
     }
-    // Find the product card element based on Id
-    function getProductCard(productId) {
-          const productCards = document.querySelectorAll('.product-card');
-          for (const card of productCards) {
-            const h3ProductID = card.querySelector('h3').textContent.trim();
-            if (h3ProductID === productId) {
-              return card;
+
+    function renderCheckoutContent() {
+        const cartDiv = document.getElementById('cart');
+        cartDiv.innerHTML = ''; // Clear previous content for checkout view
+
+        const currentStore = stores.find(s => s.StoreId === currentStoreId);
+        let grandTotal = 0;
+
+        // Calculate grand total for display
+        cart.forEach(item => {
+            grandTotal += (item.price + item.optionsTotal) * item.quantity;
+        });
+
+        cartDiv.innerHTML = `
+            <div class="cart-header-buttons">
+                <button id="send-order-btn">Send Order to WhatsApp</button>
+                <p id="cart-close">X</p>
+            </div>
+
+            <div id="formContainer">
+                <label for="deliveryOptions">Delivery Options:</label>
+                <select id="deliveryOptions">
+                    <option value="Self Pick Up">Self Pick 8am-9pm 302 Woodlands St 31</option>
+                    <option value="By MeetUp Marsiling MRT">MeetUp Marsiling MRT($1.00)</option>
+                    <option value="By Appointment">To Arrange Time/Place Via Text($2.50)</option>
+                </select>  
+                <div id="dateTimeForm">
+                    <h4>Enter Date,Time for Marsiling Mrt MeetUp Only</h4>
+                    <label for="dateInput">Date: For Marsiling Mrt MeetUp Only</label>
+                    <select id="dateTimeInput" required>
+                        <option value="" disabled selected>Select a date and time</option>
+                    </select>
+                </div>
+            </div>
+            
+            <p id="checkout-store-unique">${currentStore ? currentStore.StoreUnique : ''}</p>
+            <h3 id="cart-grand-total">Grand Total: $${grandTotal.toFixed(2)}</h3>
+            <hr>
+        `;
+
+        // Populate time options and set initial state
+        populateTimeOptions();
+        updateMeetupDateTimeState(); // Set initial visibility based on default selection
+
+        // Add event listener for delivery options change
+        document.getElementById('deliveryOptions').addEventListener('change', updateMeetupDateTimeState);
+
+        cart.forEach((item) => {
+            const itemTotal = (item.price + item.optionsTotal) * item.quantity;
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('cart-item-checkout');
+            itemDiv.innerHTML = `
+                <div class="cart-item-summary">
+                    <span class="cart-item-code-qty">${item.productId} X${item.quantity}</span>
+                    <span class="cart-item-prices">$${itemTotal.toFixed(2)} (${item.price.toFixed(2)})</span>
+                </div>
+                <div class="cart-item-options">
+                    <ul>
+                        ${Object.entries(item.selectedOptions).map(([group, options]) => {
+                            if (Array.isArray(options)) {
+                                return options.map(opt => {
+                                    if (opt.name !== 'No Thanks') {
+                                        return `<li>${group}: ${opt.name} ($${opt.price.toFixed(2)})</li>`;
+                                    }
+                                    return '';
+                                }).join('');
+                            } else if (options.name && options.price !== undefined) { 
+                                if (options.name !== 'No Thanks') {
+                                    return `<li>${group}: ${options.name} ($${options.price.toFixed(2)})</li>`;
+                                }
+                            }
+                            return ''; 
+                        }).join('')}
+                    </ul>
+                </div>
+                <div class="cart-item-controls">
+                    <button class="decrease-qty-btn" data-index="${cart.indexOf(item)}">-</button>
+                    <button class="increase-qty-btn" data-index="${cart.indexOf(item)}">+</button>
+                    <button class="remove-from-cart-btn" data-index="${cart.indexOf(item)}">Remove</button>
+                </div>
+            `;
+            cartDiv.appendChild(itemDiv);
+        });
+
+        // Re-attach event listeners for close, remove, increase, decrease buttons
+        document.getElementById('cart-close').addEventListener('click', toggleCart);
+        document.getElementById('send-order-btn').addEventListener('click', sendOrderToWhatsApp);
+
+        document.querySelectorAll('.remove-from-cart-btn').forEach(button => {
+            button.addEventListener('click', removeFromCart);
+        });
+        document.querySelectorAll('.increase-qty-btn').forEach(button => {
+            button.addEventListener('click', increaseQuantity);
+        });
+        document.querySelectorAll('.decrease-qty-btn').forEach(button => {
+            button.addEventListener('click', decreaseQuantity);
+        });
+    }
+
+    function populateTimeOptions() {
+        const dateTimeInput = document.getElementById('dateTimeInput');
+        dateTimeInput.innerHTML = '<option value="" disabled selected>Select a date and time</option>'; // Clear existing options
+
+        const now = new Date();
+        now.setHours(now.getHours() + 1); // Start from next hour to avoid past times on current day
+
+        for (let i = 0; i < 7; i++) { // Generate options for the next 7 days
+            const date = new Date(now);
+            date.setDate(now.getDate() + i);
+
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const dateString = `${year}-${month}-${day}`;
+
+            // Define specific time slots for meetup (e.g., every half hour from 9 AM to 9 PM)
+            for (let hour = 9; hour <= 21; hour++) { // From 9 AM to 9 PM
+                for (let minute = 0; minute < 60; minute += 30) {
+                    const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                    const dateTimeValue = `${dateString} ${timeString}`;
+                    const dateTimeDisplay = `${dateString} ${timeString}`;
+
+                    const option = document.createElement('option');
+                    option.value = dateTimeValue;
+                    option.textContent = dateTimeDisplay;
+                    dateTimeInput.appendChild(option);
+                }
             }
-          }
-          return null;
         }
-    // Function to toggle visibility of options when "Made it a meal" button is clicked
-    function toggleOption(productId,displayType) {
-      const product = getProductCard(productId);
-      let option = product.querySelector('.options-container');
-      let nextElements = [];
-      let nextElement = option.nextElementSibling; 
-      
-      while (nextElement) {
-          if (nextElement.classList.contains('add2Cart')) {
-              break;
-          }
-          nextElements.push(nextElement);
-          nextElement = nextElement.nextElementSibling;
-      }
-      nextElements.forEach(element => {
-        if (displayType==="none") {
-          element.style.display = 'none';
-        } else {
-          element.style.display = element.style.display === 'none' ? 'block' : 'none';
-        }
-      });
-      //console.log(nextElements);
-      //button.textContent = button.textContent === 'Made it a meal' ? 'Hide Meal Options' : 'Made it a meal';
     }
+
+    function updateMeetupDateTimeState() {
+        const deliveryOption = document.getElementById('deliveryOptions').value;
+        const dateTimeForm = document.getElementById('dateTimeForm');
+
+        if (deliveryOption === "By MeetUp Marsiling MRT") {
+            dateTimeForm.style.display = 'block'; // Show the date/time picker
+            document.getElementById('dateTimeInput').setAttribute('required', 'true');
+        } else {
+            dateTimeForm.style.display = 'none'; // Hide the date/time picker
+            document.getElementById('dateTimeInput').removeAttribute('required');
+        }
+    }
+
+
+    function increaseQuantity(event) {
+        const index = parseInt(event.target.dataset.index);
+        if (cart[index]) {
+            cart[index].quantity++;
+            if (document.getElementById('send-order-btn')) { // If in checkout view
+                renderCheckoutContent();
+            } else {
+                renderCartContent();
+            }
+        }
+    }
+
+    function decreaseQuantity(event) {
+        const index = parseInt(event.target.dataset.index);
+        if (cart[index]) {
+            if (cart[index].quantity > 1) {
+                cart[index].quantity--;
+            } else {
+                cart.splice(index, 1); 
+            }
+            if (document.getElementById('send-order-btn')) { // If in checkout view
+                renderCheckoutContent();
+            } else {
+                renderCartContent();
+            }
+        }
+    }
+
+    function sendOrderToWhatsApp() {
+        const store = stores.find(s => s.StoreId === currentStoreId);
+        if (!store) {
+            alert("Store information not found.");
+            return;
+        }
+
+        let message = `Hello ${store.StoreName},\n\nMy order details:\n\n`;
+        let grandTotal = 0;
+
+        cart.forEach((item, index) => {
+            const itemTotal = (item.price + item.optionsTotal) * item.quantity;
+            grandTotal += itemTotal;
+            message += `${index + 1}. ${item.productId} X${item.quantity} - $${itemTotal.toFixed(2)} ($${item.price.toFixed(2)}/unit)\n`;
+            
+            Object.entries(item.selectedOptions).forEach(([group, options]) => {
+                if (Array.isArray(options)) {
+                    options.forEach(opt => {
+                        if (opt.name !== 'No Thanks') { 
+                            message += `   - ${group}: ${opt.name} ($${opt.price.toFixed(2)})\n`;
+                        }
+                    });
+                } else if (options.name && options.price !== undefined && options.name !== 'No Thanks') {
+                    message += `   - ${group}: ${options.name} ($${options.price.toFixed(2)})\n`;
+                }
+            });
+            message += `\n`; // Add extra line for readability
+        });
+
+        message += `Grand Total: $${grandTotal.toFixed(2)}\n\n`;
+        
+        const deliveryOption = document.getElementById('deliveryOptions').value;
+        message += `Delivery Option: ${deliveryOption}\n`;
+
+        // Add date/time if selected and visible
+        const dateTimeInput = document.getElementById('dateTimeInput');
+        const dateTimeForm = document.getElementById('dateTimeForm');
+        if (dateTimeForm.style.display !== 'none' && dateTimeInput && dateTimeInput.value) {
+            message += `Selected Date/Time: ${dateTimeInput.value}\n`;
+        }
+
+        message += `\nThank you!`;
+
+        const whatsappUrl = `https://wa.me/${store.StorePhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+    }
+
+
+    function addProductToCart(productId) {
+        const store = stores.find(s => s.StoreId === currentStoreId);
+        const product = store.Products.find(p => p.Id === productId);
+
+        if (!product) {
+            console.error('Product not found:', productId);
+            return;
+        }
+
+        const productCard = getProductCard(productId);
+        const productSpecificOptions = {};
+        let optionsTotalPrice = 0;
+
+        // Iterate through all option groups for the current product
+        for (const groupName in product.Options) {
+            const groupInputs = productCard.querySelectorAll(`input[name="${productId}_${groupName}"]`);
+            if (groupName === 'Drink') {
+                const selectedDrinkOptions = [];
+                groupInputs.forEach(input => {
+                    if (input.checked) {
+                        const optionName = input.value;
+                        const optionPrice = parseFloat(input.dataset.price);
+                        selectedDrinkOptions.push({ name: optionName, price: optionPrice });
+                        optionsTotalPrice += optionPrice;
+                    }
+                });
+                if (selectedDrinkOptions.length > 0) {
+                    productSpecificOptions[groupName] = selectedDrinkOptions;
+                }
+            } else {
+                groupInputs.forEach(input => {
+                    if (input.checked) {
+                        const optionName = input.value;
+                        const optionPrice = parseFloat(input.dataset.price);
+                        productSpecificOptions[groupName] = { name: optionName, price: optionPrice };
+                        optionsTotalPrice += optionPrice;
+                    }
+                });
+            }
+        }
+        
+        // Ensure "No Thanks" is handled for groups that default to it if no other option is selected
+        for (const groupName in product.Options) {
+            if (!productSpecificOptions[groupName] || (Array.isArray(productSpecificOptions[groupName]) && productSpecificOptions[groupName].length === 0)) {
+                const firstOptionObject = product.Options[groupName] && product.Options[groupName][0];
+                if (firstOptionObject && firstOptionObject.hasOwnProperty("No Thanks")) {
+                    if (groupName === 'Drink') {
+                        productSpecificOptions[groupName] = [{ name: 'No Thanks', price: 0 }];
+                    } else {
+                        productSpecificOptions[groupName] = { name: 'No Thanks', price: 0 };
+                    }
+                }
+            }
+        }
+
+        // Check if the product is already in the cart
+        const existingItemIndex = cart.findIndex(item => 
+            item.productId === productId && 
+            JSON.stringify(item.selectedOptions) === JSON.stringify(productSpecificOptions)
+        );
+
+        if (existingItemIndex > -1) {
+            cart[existingItemIndex].quantity++;
+        } else {
+            cart.push({
+                productId: productId,
+                productName: product.ProductName,
+                price: product.Price,
+                quantity: 1,
+                selectedOptions: productSpecificOptions,
+                optionsTotal: optionsTotalPrice
+            });
+        }
+        
+        renderCartContent();
+        showMessageBox();
+        toggleOption(productId, 'none'); 
+        clearAllOptionsExceptForProduct(productId); 
+        selectedOptions = {}; 
+    }
+
+    function removeFromCart(event) {
+        const index = parseInt(event.target.dataset.index);
+        cart.splice(index, 1);
+        if (document.getElementById('send-order-btn')) { // If in checkout view
+            renderCheckoutContent();
+        } else {
+            renderCartContent();
+        }
+    }
+
+    function toggleCart() {
+        const cartDiv = document.getElementById('cart');
+        const cartIcon = document.getElementById('cart-icon');
+        
+        const isCartHidden = cartDiv.style.display === 'none' || cartDiv.style.display === '';
+        
+        if (isCartHidden) {
+            cartDiv.style.display = 'block';
+            cartIcon.setAttribute('aria-expanded', 'true');
+            renderCartContent(); // Always render initial cart content when opening
+        } else {
+            cartDiv.style.display = 'none';
+            cartIcon.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    // --- UI and Display Functions ---
+    function showMessageBox() {
+        const messageBox = document.querySelector('.message-box');
+        messageBox.style.display = 'flex';
+        setTimeout(() => {
+            messageBox.style.display = 'none';
+        }, 2500);
+    }
+
+    function displayStoreInfo(store) {
+        const storeFront = document.getElementById('store-front');
+        storeFront.innerHTML = `
+            <img id="store-banner" src="${store.StoreBannerImg}" alt="${store.StoreName} Banner">
+            <div id="store-info">
+                <h2 id="store-name">${store.StoreName}</h2>
+                <span id="store-address">${store.StoreAddress}</span>
+                <span id="store-wsphone">Whatsapp/Phone: ${store.StorePhone}</span>
+                <span id="store-web"><a href="${store.StoreWebsite}" target="_blank">${store.StoreWebsite}</a></span>
+            </div>
+            <img id="store-logo" src="${store.LogoImg}" alt="${store.StoreName} Logo">
+        `;
+        document.getElementById('store-msg').textContent = store.PromotionMessage;
+        document.getElementById('announcement').textContent = store.Annoncement;
+    }
+
+    function displayProducts(products) {
+        const productContainer = document.getElementById('product-container');
+        productContainer.innerHTML = '';
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card');
+            productCard.innerHTML = `
+                <img class="product-img" src="${product.ProductImg}" alt="${product.ProductName}">
+                <h3>${product.Id}</h3>
+                <h4>${product.ProductName}</h4>
+                <p>${product.Description}</p>
+                <p>Price: $${product.Price.toFixed(2)}</p>
+                <button class="toggleOption" data-product-id="${product.Id}">Options</button>
+                <div class="options-container" style="display: none;"></div>
+                <button class="add2Cart" data-product-id="${product.Id}">Add to Cart</button>
+            `;
+
+            const optionsContainer = productCard.querySelector('.options-container');
+            for (const optionGroup in product.Options) {
+                const groupDiv = document.createElement('div');
+                groupDiv.classList.add('options-group');
+                groupDiv.innerHTML = `<h5>${optionGroup}:</h5>`;
+
+                if (product.Options[optionGroup] && product.Options[optionGroup][0]) {
+                    Object.entries(product.Options[optionGroup][0]).forEach(([optionName, optionPrice]) => {
+                        const label = document.createElement('label');
+                        const inputType = optionGroup === 'Drink' ? 'checkbox' : 'radio';
+                        label.innerHTML = `
+                            <input type="${inputType}" name="${product.Id}_${optionGroup}" value="${optionName}" data-price="${optionPrice}">
+                            ${optionName} ($${optionPrice.toFixed(2)})
+                        `;
+                        groupDiv.appendChild(label);
+                    });
+                }
+                optionsContainer.appendChild(groupDiv);
+            }
+            productContainer.appendChild(productCard);
+        });
+
+        // Add event listeners for toggle and add to cart buttons
+        document.querySelectorAll('.toggleOption').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const productId = event.target.dataset.productId;
+                toggleOption(productId);
+            });
+        });
+
+        document.querySelectorAll('.add2Cart').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const productId = event.target.dataset.productId;
+                addProductToCart(productId);
+            });
+        });
+
+        // Add event listeners for option changes
+        document.querySelectorAll('.options-group input').forEach(input => {
+            input.addEventListener('change', handleOptionChange);
+        });
+    }
+
+    function toggleOption(productId) {
+        const productCard = getProductCard(productId);
+        if (!productCard) return;
+
+        const optionsContainer = productCard.querySelector('.options-container');
+        const isHidden = optionsContainer.style.display === 'none' || optionsContainer.style.display === '';
+
+        if (isHidden) {
+            clearAllOptionsExceptForProduct(productId);
+        }
+
+        optionsContainer.style.display = isHidden ? 'block' : 'none';
+
+        const toggleButton = productCard.querySelector('.toggleOption');
+        toggleButton.textContent = isHidden ? 'Hide Options' : 'Options';
+
+        if (isHidden) {
+            selectedOptions = {}; 
+            productCard.querySelectorAll('.options-group input').forEach(input => {
+                input.checked = false;
+            });
+        }
+    }
+
+    function clearAllOptionsExceptForProduct(productIdToKeep = null) {
+        document.querySelectorAll('.product-card').forEach(card => {
+            const currentProductId = card.querySelector('h3').textContent.trim();
+            const optionsContainer = card.querySelector('.options-container');
+            const toggleButton = card.querySelector('.toggleOption');
+
+            if (productIdToKeep && currentProductId === productIdToKeep) {
+                if (optionsContainer.style.display !== 'block') { 
+                    optionsContainer.style.display = 'none';
+                    toggleButton.textContent = 'Options';
+                    card.querySelectorAll('.options-group input').forEach(input => {
+                        input.checked = false;
+                    });
+                }
+            } else {
+                optionsContainer.style.display = 'none';
+                toggleButton.textContent = 'Options';
+                card.querySelectorAll('.options-group input').forEach(input => {
+                    input.checked = false;
+                });
+            }
+        });
+    }
+
+
+    function handleOptionChange(event) {
+        const input = event.target;
+        const groupName = input.name.split('_')[1];
+        const productId = input.name.split('_')[0];
+        const productCard = getProductCard(productId);
+
+        if (groupName === 'Drink') {
+            if (input.value === 'No Thanks' && input.checked) {
+                const otherDrinkOptions = Array.from(productCard.querySelectorAll(`input[name="${input.name}"]:checked`))
+                                            .filter(opt => opt !== input && parseFloat(opt.dataset.price) > 0);
+
+                if (otherDrinkOptions.length > 0) {
+                    const confirmClear = confirm("Selecting 'No Thanks' will remove other selected drink options. Do you agree?");
+                    if (confirmClear) {
+                        otherDrinkOptions.forEach(opt => opt.checked = false);
+                    } else {
+                        input.checked = false; 
+                    }
+                }
+            } else if (input.value !== 'No Thanks' && input.checked) {
+                const noThanksInput = productCard.querySelector(`input[name="${input.name}"][value="No Thanks"]`);
+                if (noThanksInput && noThanksInput.checked) {
+                    noThanksInput.checked = false;
+                }
+            }
+        } else {
+            if (input.type === 'radio' && input.checked) {
+                productCard.querySelectorAll(`input[name="${input.name}"]`).forEach(radio => {
+                    if (radio !== input) {
+                        radio.checked = false;
+                    }
+                });
+            }
+        }
+    }
+
+    // --- Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+        loadCart();
+
+        const urlParams = getUrlParams();
+        const storeIdFromUrl = urlParams['StoreID'];
+
+        const defaultStore = stores[0];
+        currentStoreId = storeIdFromUrl || defaultStore.StoreId;
+
+        const store = stores.find(s => s.StoreId === currentStoreId);
+        if (store) {
+            displayStoreInfo(store);
+            displayProducts(store.Products);
+            createCategoryNavigation(store.Categories);
+        } else {
+            console.error('Store not found. Displaying default store.');
+            displayStoreInfo(defaultStore);
+            displayProducts(defaultStore.Products);
+            createCategoryNavigation(defaultStore.Categories);
+        }
+
+        document.getElementById('cart-icon').addEventListener('click', toggleCart);
+    });
+
+    function createCategoryNavigation(categories) {
+        const categoryNav = document.getElementById('category-nav');
+        categoryNav.innerHTML = '';
+        categories.forEach(category => {
+            const link = document.createElement('a');
+            link.href = `#${category}`;
+            link.textContent = category;
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                filterProductsByCategory(category);
+            });
+            categoryNav.appendChild(link);
+        });
+    }
+
+    function filterProductsByCategory(category) {
+        const store = stores.find(s => s.StoreId === currentStoreId);
+        if (!store) return;
+
+        let filteredProducts;
+        if (category === 'All') {
+            filteredProducts = store.Products;
+        } else {
+            filteredProducts = store.Products.filter(product =>
+                product.Categories.includes(category)
+            );
+        }
+        displayProducts(filteredProducts);
+    }
+
     </script>
 </body>
-
 </html>
