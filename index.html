@@ -936,9 +936,7 @@
     function renderCartContent() {
         const cartDiv = document.getElementById('cart');
         cartDiv.innerHTML = ''; // Clear previous content
-        
         const currentStore = stores.find(s => s.StoreId === currentStoreId);
-        
         let grandTotal = 0;
 
         if (cart.length === 0) {
@@ -954,10 +952,12 @@
             cart.forEach((item, index) => {
                 const itemTotal = (item.price + item.optionsTotal) * item.quantity; 
                 grandTotal += itemTotal;
+                const selectedOptionsCount = Object.values(item.selectedOptions).flat().filter(opt => opt.name !== 'No Thanks').length;
 
                 cartItemsHtml += `
                     <div class="cart-item">
-                        <p>${item.productName} ($${item.price.toFixed(2)} / unit)</p>
+                        <p>Product: ${item.productName} ($${item.price.toFixed(2)} / unit)</p>
+                        <p>${selectedOptionsCount > 1 ?"Selected Option/s" : "No Option Selected"}</p>
                         <ul>
                             ${Object.entries(item.selectedOptions).map(([group, options]) => {
                                 if (Array.isArray(options)) {
@@ -978,8 +978,8 @@
                         <p>Item Total: $${itemTotal.toFixed(2)}</p>
                         <div class="cart-item-actions">
                             <div class="cart-item-qty">
+                                <span>Qty= ${item.quantity}</span>
                                 <button class="decrease-qty-btn" data-index="${index}">-</button>
-                                <span>${item.quantity}</span>
                                 <button class="increase-qty-btn" data-index="${index}">+</button>
                             </div>
                             <button class="remove-from-cart-btn" data-index="${index}">Remove</button>
@@ -1073,8 +1073,9 @@
             itemDiv.classList.add('cart-item-checkout');
             itemDiv.innerHTML = `
                 <div class="cart-item-summary">
-                    <span class="cart-item-code-qty">${item.productId} X${item.quantity}</span>
-                    <span class="cart-item-prices">$${itemTotal.toFixed(2)} (${item.price.toFixed(2)})</span>
+                    <span class="cart-item-code-qty">${item.productId} Product:${item.productName} Qty=${item.quantity}</span>
+                    <span class="cart-item-prices">$${itemTotal.toFixed(2)})</span>
+                    <div>Product Base Price: (${item.price.toFixed(2)}</div>
                 </div>
                 <div class="cart-item-options">
                     <ul>
@@ -1182,6 +1183,7 @@
         if (cart[index]) {
             if (cart[index].quantity > 1) {
                 cart[index].quantity--;
+                
             } else {
                 cart.splice(index, 1); 
             }
