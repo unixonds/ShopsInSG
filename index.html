@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<!-- Stable version-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shops in SG</title>
+    <title>Footopia Self Order</title>
     <script src="util.js"></script>
     <style>
       @keyframes showMessage {
@@ -30,16 +31,10 @@
               transform: translateX(0%);
           }
           100% {
-              transform: translateX(-20%);
+              transform: translateX(-100%);
           }
       }
-      #announcement{
-        padding: 1%;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-family: Arial, sans-serif;
-      }
+      
       body {
         font-family: 'Arial', sans-serif;
         margin: 0;
@@ -70,7 +65,7 @@
       }
       #cart {
         display: none;
-        position: fixed;
+        /* position: fixed; */
         top: 0;
         left: 0;
         width: 100%;
@@ -96,7 +91,7 @@
           cursor: pointer;
           width: 3rem; 
           height: 3rem;
-          z-index: 2; /* Ensure it's above other content but below cart close*/
+          z-index: 1; /* Ensure it's above other content */
       }
       
       /* New styles for the checkout view within the cart */
@@ -109,9 +104,9 @@
       }
 
       #cart-close {
-        position: fixed;
-        top: 20px;
-        right: 10px;
+        position: fixed; 
+        top: 0;
+        right: 0;
         font-size: 2.5rem;
         color: red;
         background-color: #444;
@@ -173,7 +168,7 @@
         content: "$";
       }
       #checkout-page {
-        position: fixed;
+        /* position: fixed; */
         top: 0;
         left: 0;
         width: 100%;
@@ -183,7 +178,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 999;
+        /* z-index: 1; */
       }
       #category-nav {
         position: sticky;
@@ -472,21 +467,13 @@
         font-size: 0.9rem;
         border-radius: 6px;
       }
+
       #checkout-store-unique {
         color: #f39c12; /* Orange color for emphasis */
         font-weight: bold;
         margin-bottom: 15px;
       }
-      .whatsapp-icon {
-          width: 24px;
-          height: 24px;
-          cursor: pointer;
-          fill: #25D366;
-        }
-      .whatsapp-link {
-        display: inline-flex;
-        align-items: center;
-      }
+      
       @media only screen and (max-width: 500px) {
         #store-front {
           text-align: center;
@@ -497,10 +484,12 @@
             margin: 5px auto; 
             order: unset; 
         }
+  
         #store-info {
           width: 70vw;
           gap: 3px;
         }
+  
         #store-logo {
           justify-content: center;
           align-items: center;
@@ -508,10 +497,9 @@
           height: 6rem;
           border: 1px solid rgba(245, 241, 7, 0.815);
         }
-        #category-nav {
-          width: 90%;
-        }
-        
+          #category-nav {
+            width: 90%;
+          }
       }
       </style>
 </head>
@@ -520,22 +508,18 @@
         <span id="cart-count">0</span>
         <span id="cart-total">$0.00</span>
     </div>
-    
+    <div id="checkout-page"></div>
     <div id="cart">
       </div>
     
     <div id="store-front">
       
     </div>
-    <div id="announcement">
-    
-    </div>
-
     <nav id="category-nav">
         </nav>
     <div id="store-msg-sticky">
       <p id="store-msg">
-      <span>Place holder for Store message</span>
+      <span>This is text that will be placed</span>
       </p>
     </div>
     <div id="product-container">
@@ -633,64 +617,6 @@
             "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
             },
             "Diet": ["HighProtein"]
-        },
-        {"Id": "AA07",
-            "ProductName": "Mushroom Burger",
-            "ProductImg" : "images/AA07.jpg",
-            "Description": "A savory burger, made with 100% beef patty, mushroom, cheese, lettuce, tomato, onion, and our Special sauce. Served with fries and a drink of your choice.",
-            "Categories": ["All", "Lunch", "Dinner"],
-            "Price": 6.20,
-            "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}], 
-            "Dessert": [{"No Thanks": 0.00,"ChengDo": 2.00,"BoBo ChaCha": 3.20}],
-            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
-            },
-            "Diet": ["LowCarbo/Sugar"]
-        },
-        {"Id": "AA08",
-            "ProductName": "Salad",
-            "ProductImg" : "images/AA08.jpg",
-            "Description": "A fresh and healthy salad, made with lettuce, tomato, cucumber, carrot, cheese, and your choice of dressing. Served with a drink of your choice.",
-            "Categories": ["All", "Breakfast", "Lunch", "Dinner", "Special"],
-            "Price": 6.40,
-            "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}], 
-            "Dressing": [{"No Thanks": 0.00,"Dressing2": 0.50,"Dressing3": 0.50,"Dressing4": 0.50}], 
-            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
-            },
-            "Diet": ["Vegetarian", "LowCarbo/Sugar"]
-        },
-        {"Id": "AA09",
-            "ProductName": "Burger Combo Meal",
-            "ProductImg" : "images/AA09.jpg",
-            "Description": "A tasty burger, made with your choice of Bread, meat, cheese, and Vegetables. Served with fries and a drink of your choice.",
-            "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
-            "Price": 4.20,
-            "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}],
-            "Bread": [{"No Thanks": 0.00,"Italian": 0.50,"Oat": 0.50,"Grain 100%": 0.50}],
-            "Meat": [{"No Thanks": 0.00,"Chicken Nuggets": 1.00,"Fried Fish Fillet": 1.00,"Mutton Cubes": 1.00}],
-            "Cheese": [{"No Thanks": 0.00,"Mozerella": 0.50,"Parmesan": 0.50,"Cheddar": 0.50}],
-            "Vegetables": [{"No Thanks": 0.00,"Garden Greens": 0.00,"Lettuce & Kale": 0.00,"Caesar Sald": 0.00}], 
-            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
-            },
-            "Diet": ["HighProtein"]
-        },
-        {"Id": "AA10",
-            "ProductName": "Wrap",
-            "ProductImg" : "images/AA10.jpg",
-            "Description": "A delicious wrap, made with your choice of tortilla, meat, cheese, and Vegetables. Served with fries and a drink of your choice.",
-            "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
-            "Price": 4.35,
-            "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}],
-            "Tortilla": [{"Tortilla1": 0.00,"Tortilla2": 0.50,"Tortilla3": 0.50,"Tortilla4": 0.50}],
-            "Meat": [{"No Thanks": 0.00,"Chicken Nuggets": 1.00,"Fried Fish Fillet": 1.00,"Mutton Cubes": 1.00}],
-            "Cheese": [{"No Thanks": 0.00,"Mozerella": 0.50,"Parmesan": 0.50,"Cheddar": 0.50}],
-            "Vegetables": [{"No Thanks": 0.00,"Garden Greens": 0.00,"Lettuce & Kale": 0.00,"Caesar Sald": 0.00}],
-            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Poach Egg": 1.20}]
-            },
-            "Diet": ["HighProtein"]
         }
         ],
         "OperationHours": {
@@ -700,56 +626,55 @@
         }
     },
     {"StoreId": "Foodtopia",
-        "StoreUnique": "WLS302Foodtopia",
-        "StoreName": "Home Made Food",
+        "StoreUnique": "WLS302HomeMadeFood",
+        "StoreName": "Foodtopia",
         "StoreAddress": "302 Woodlands St31, Singapore",
         "LogoImg": "images/logo2.jpg",
         "StoreBannerImg": "images/StoreBanner4.jpg",
         "StoreWebsite": "www.unixonds.github.io/ShopsInSG/?StoreID:Foodtopia",
         "GeoLocation":{"Lat": 1.387353973, "Lon": 103.8064571},
         "StorePhone": "+6591518277",
-        "Annoncement":"For large advance order, we can deliver to home address. Delivery fee applies.",
         "PromotionMessage": "All items at 20% discount while stock last. Welcome to Foodtopia, where we serve the best home made food that we love to eat! Try our creation of maki roll with our variety of fillings. Don't forget to add a side, and a drink to complete your meal. For a limited time, enjoy our Promotion of buy one get one free on any pizza. Hurry, this offer won't last long!",
         "Categories": ["All", "Featured", "Promotion", "Special"],
         "Products": [
         {"Id": "BB01",
             "ProductName": "Gimbab Roll Sesame Oil",
             "ProductImg" : "images/BB01.jpg",
-            "Description": "Specially created for Singaporean taste bud. You will want more! >Standard: Spinach. >Luxury: Cucumber, egg, crab stick, Japan Mayonniase, extra rice. >Premium: extra large, Japanese Mayo, tuna, floss, cucumber.",
+            "Description": "Specially created for Singaporean taste bud. You will want more! Standard: Spinach, carrot. Luxury: Cucumber, egg, crab stick, Japan Mayonniase, extra rice. Premium: extra large, Japanese Mayo, tuna, floss, cucumber.",
             "Categories": ["All", "Featured", "Special"],
             "Price": 1.50,
             "Options": {
-            "Size": [{"Standard 70g": 0.00,"Luxury 200g": 1.00,"Premium 400g": 2.50}],
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"CokeZero 250mL": 1.00}],
-            "Dessert": [{"No Thanks": 0.00, "Coconut Pudding": 2.00, "BoBo ChaCha": 2.40}],
-            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Fried Egg": 0.80}]
+            "Size": {"Standard 100g": 0.00,"Luxury 200g": 1.00,"Premium 400g": 2.50},
+            "Drink": {"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"CokeZero 250mL": 1.00},
+            "Dessert": {"No Thanks": 0.00, "Coconut Pudding": 2.00, "BoBo ChaCha": 2.40},
+            "AddOn": {"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Fried Egg": 0.80}
             },
             "Diet": ["LowCarbo/Sugar"]
         },
         {"Id": "BB02",
             "ProductName": "Japanese Maki Roll Vinegar",
             "ProductImg" : "images/BB02.jpg",
-            "Description": "Flavoured with Sushi vinegar. >Standard: Crab stick. >Luxury: Cucumber, egg, crab stick, Japan Mayonniase, Black Pepper, Chilli, extra rice. >Premium: extra large, Japanese Mayo, tuna, floss, cucumber.",
+            "Description": "Standard: Crab stick. Luxury: Cucumber, egg, crab stick, Japan Mayonniase, extra rice. Premium: extra large, Japanese Mayo, tuna, floss, cucumber.",
             "Categories": ["All", "Featured", "Special"],
             "Price": 1.50,
             "Options": {
-            "Size": [{"Standard 100g": 0.00,"Luxury 240g": 1.00,"Premium 400g": 2.50}],
-            "Drink": [{"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"CokeZero 250mL": 1.00}],
-            "Dessert": [{"No Thanks": 0.00, "Coconut Pudding": 2.00, "BoBo ChaCha": 2.40}],
-            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Fried Egg": 0.80}]
+            "Size": {"Standard 100g": 0.00,"Luxury 200g": 1.00,"Premium 400g": 2.50},
+            "Drink": {"No Thanks": 0.00,"Mango Juice": 4.00,"Lime Juice": 1.00,"CokeZero 250mL": 1.00},
+            "Dessert": {"No Thanks": 0.00, "Coconut Pudding": 2.00, "BoBo ChaCha": 2.40},
+            "AddOn": {"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 3.20,"Fruit Rojak": 2.10,"Fried Egg": 0.80}
             },
             "Diet": ["LowCarbo/Sugar"]
         },
         {"Id": "BB03",
             "ProductName": "Mua Chee",
             "ProductImg" : "images/BB03.jpg",
-            "Description": "This simple but very satisfying snack/meal is loved by even the most discerning taste bud. Choice of >Standard: Glutinuous Rice Flour, Vege Oil and Peanut Only >Luxury: Glutinuous Rice Flour, Upsize with Peanut, Black or White Sesame >Premium: Large size  Glutinuous Rice Flour, mixed with Peanut, Black and White Sesame. >Option to be served with a drink of your choice.",
+            "Description": "Choice of Standard: White Only Luxury: Upsize to Black or White Premium: Large size mixed black & white. Option to be served with a drink of your choice.",
             "Categories": ["All", "Featured", "Special"],
             "Price": 1.20,
             "Options": {
-            "Size": [{"Standard 100g": 0.00,"Luxury 200g White": 1.00,"Luxury 200g Black": 1.00,"Premium 400g Black & White": 2.50}],
-            "Drink": [{"No Thanks": 0.00,"Mango Milk Juice 200mL": 2.00,"Lime Juice": 1.00,"CokeZero 250mL": 1.00}],
-            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 1.80,"Fruit Rojak": 2.10,"Fried Egg": 1.00}]
+            "Size": {"Standard 100g": 0.00,"Luxury 200g White": 1.00,"Luxury 200g Black": 1.00,"Premium 400g Black & White": 2.50},
+            "Drink": {"No Thanks": 0.00,"Mango Milk Juice 200mL": 2.00,"Lime Juice": 1.00,"CokeZero 250mL": 1.00},
+            "AddOn": {"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 1.80,"Fruit Rojak": 2.10,"Fried Egg": 1.00}
             },
             "Diet": ["Vegetarian", "LowCarbo/Sugar"]
         },
@@ -760,10 +685,10 @@
             "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
             "Price": 6.30,
             "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.80,"Lime Juice": 1.00,"CokeZero 250mL": 1.500}],
-            "Meat": [{"No Thanks": 0.00,"Chicken Nuggets 4pcs": 2.00,"Fried Fish Fillet": 1.00,"Hard Bolied Egg": 0.80}],
-            "Cheese": [{"No Thanks": 0.00,"Mozerella": 1.80,"Cheddar": 1.80}],
-            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu 2pcs": 2.00,"Fish Cake": 1.80,"Fruit Rojak": 2.40,"Hard Bolied Egg": 0.80}]
+            "Drink": {"No Thanks": 0.00,"Mango Juice Milk": 2.80,"Lime Juice": 1.00,"CokeZero 250mL": 1.500},
+            "Meat": {"No Thanks": 0.00,"Chicken Nuggets 4pcs": 2.00,"Fried Fish Fillet": 1.00,"Hard Bolied Egg": 0.80},
+            "Cheese": {"No Thanks": 0.00,"Mozerella": 1.80,"Cheddar": 1.80},
+            "AddOn": {"No Thanks": 0.00,"Seafood Toufu 2pcs": 2.00,"Fish Cake": 1.80,"Fruit Rojak": 2.40,"Hard Bolied Egg": 0.80}
             },
             "Diet": ["HighProtein"]
         },
@@ -774,11 +699,11 @@
             "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
             "Price": 3.20,
             "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.50,"Lime Juice": 0.50,"CokeZero 250mL": 0.50}],
-            "Bread": [{"No Thanks": 0.00,"Italian": 0.50,"Oat": 0.50,"Grain 100%": 0.50}],
-            "Meat": [{"No Thanks": 0.00,"Chicken Nuggets 4pcs": 1.00,"Fried Fish Fillet": 1.00,"Hard Bolied Egg": 1.00}],
-            "Cheese": [{"No Thanks": 0.00,"Egg Mayonaise": 0.60,"Mozerella": 1.80,"Cheddar": 1.80}],
-            "AddOn": [{"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 1.80,"Fruit Rojak": 2.10,"Fried Egg": 1.00}]
+            "Drink": {"No Thanks": 0.00,"Mango Juice Milk": 2.50,"Lime Juice": 0.50,"CokeZero 250mL": 0.50},
+            "Bread": {"No Thanks": 0.00,"Italian": 0.50,"Oat": 0.50,"Grain 100%": 0.50},
+            "Meat": {"No Thanks": 0.00,"Chicken Nuggets 4pcs": 1.00,"Fried Fish Fillet": 1.00,"Hard Bolied Egg": 1.00},
+            "Cheese": {"No Thanks": 0.00,"Egg Mayonaise": 0.60,"Mozerella": 1.80,"Cheddar": 1.80},
+            "AddOn": {"No Thanks": 0.00,"Seafood Toufu": 2.00,"Fish Cake": 1.80,"Fruit Rojak": 2.10,"Fried Egg": 1.00}
             },
             "Diet": ["HighProtein"]
         },
@@ -789,11 +714,11 @@
             "Categories": ["All", "Breakfast", "Lunch", "Dinner"],
             "Price": 5.40,
             "Options": {
-            "Drink": [{"No Thanks": 0.00,"Mango Juice Milk": 2.00,"Lime Juice": 1.50,"CokeZero 250mL": 0.50}],
-            "Tortilla": [{"Tortilla1": 0.00,"Tortilla2": 0.50,"Tortilla3": 0.50,"Tortilla4": 0.50}],
-            "Meat": [ { "No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 } ],
-            "Cheese": [ { "No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 } ],
-            "AddOn": [ { "No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Hard Bolied Egg": 0.80 } ]
+            "Drink": {"No Thanks": 0.00,"Mango Juice Milk": 2.00,"Lime Juice": 1.50,"CokeZero 250mL": 0.50},
+            "Tortilla": {"Tortilla1": 0.00,"Tortilla2": 0.50,"Tortilla3": 0.50,"Tortilla4": 0.50},
+            "Meat": {"No Thanks": 0.00 , "Chicken Nuggets": 1.00 , "Fried Fish Fillet": 1.00 , "Mutton Cubes": 1.00 },
+            "Cheese": {"No Thanks": 0.00 , "Mozerella": 0.50 , "Parmesan": 0.50 , "Cheddar": 0.50 },
+            "AddOn": {"No Thanks": 0.00 , "Seafood Toufu": 2.00 , "Fish Cake": 3.20 , "Fruit Rojak": 2.10 , "Hard Bolied Egg": 0.80 } 
             },
             "Diet": ["LowCarbo/Sugar"]
         }
@@ -892,10 +817,14 @@
     }
 
     function generateOrderNo() {
-        const now = new Date();
-        const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '');
-        const timeStr = now.toTimeString().slice(0, 8).replace(/:/g, '');
-        return 'ORD' + dateStr + timeStr;
+      var rdmString = "";
+      for( ; rdmString.length < 4; rdmString  += Math.random().toString(36).substr(2));
+      var d = new Date();
+      var mth=("0" + d.getDate()).slice(-2);
+      var date=("0" + (d.getMonth()+1)).slice(-2);
+      //var dateStr = String('-'+today.getDate()+today.toLocaleString('default', { month: 'short' }));
+      var dateStr = String('-'+mth+date+ d.getHours()+d.getMinutes());
+      return rdmString.substr(0, 4).toLocaleUpperCase()+dateStr 
     }
 
     function getProductCard(productId) {
@@ -933,10 +862,11 @@
         }
     }
 
-    function renderCartContent() {
+    function renderCartContent(goTop) {
         const cartDiv = document.getElementById('cart');
         cartDiv.innerHTML = ''; // Clear previous content
         const currentStore = stores.find(s => s.StoreId === currentStoreId);
+        
         let grandTotal = 0;
 
         if (cart.length === 0) {
@@ -952,12 +882,11 @@
             cart.forEach((item, index) => {
                 const itemTotal = (item.price + item.optionsTotal) * item.quantity; 
                 grandTotal += itemTotal;
-                const selectedOptionsCount = Object.values(item.selectedOptions).flat().filter(opt => opt.name !== 'No Thanks').length;
 
                 cartItemsHtml += `
                     <div class="cart-item">
-                        <p>Product: ${item.productName} ($${item.price.toFixed(2)} / unit)</p>
-                        <p>${selectedOptionsCount > 1 ?"Selected Option/s" : "No Option Selected"}</p>
+                        <p>${item.productId}>${item.productName} ($${item.price.toFixed(2)} / unit)</p>
+                        
                         <ul>
                             ${Object.entries(item.selectedOptions).map(([group, options]) => {
                                 if (Array.isArray(options)) {
@@ -975,16 +904,19 @@
                                 return ''; 
                             }).join('')}
                         </ul>
-                        <p>Item Total: $${itemTotal.toFixed(2)}</p>
+                        <div>
+                          <p>Item Total: $${itemTotal.toFixed(2)}</p>
+                          
+                        </div>
                         <div class="cart-item-actions">
                             <div class="cart-item-qty">
-                                <span>Qty= ${item.quantity}</span>
                                 <button class="decrease-qty-btn" data-index="${index}">-</button>
+                                
                                 <button class="increase-qty-btn" data-index="${index}">+</button>
                             </div>
                             <button class="remove-from-cart-btn" data-index="${index}">Remove</button>
+                            <span>Qty = ${item.quantity}</span>
                         </div>
-                        
                         <hr>
                     </div>
                 `;
@@ -1019,6 +951,7 @@
 
         // Re-attach listener for cart close button
         document.getElementById('cart-close').addEventListener('click', toggleCart);
+        goTop==="No" ? "" : window.scroll(0, 0);
     }
 
     function renderCheckoutContent() {
@@ -1034,12 +967,13 @@
         });
 
         cartDiv.innerHTML = `
+            <div id="formContainer">
             <div class="cart-header-buttons">
-                <button id="send-order-btn">Send Order to WhatsApp</button>
+                <button type="submit" id="send-order-btn">Send Order to WhatsApp</button>
                 <p id="cart-close">X</p>
             </div>
 
-            <div id="formContainer">
+            
                 <label for="deliveryOptions">Delivery Options:</label>
                 <select id="deliveryOptions">
                     <option value="Self Pick Up">Self Pick 8am-9pm 302 Woodlands St 31</option>
@@ -1049,8 +983,8 @@
                 <div id="dateTimeForm">
                     <h4>Enter Date,Time for Marsiling Mrt MeetUp Only</h4>
                     <label for="dateInput">Date: For Marsiling Mrt MeetUp Only</label>
-                    <select id="dateTimeInput" required>
-                        <option value="" disabled selected>Select a date and time</option>
+                    <select id="hourInput" required>
+                        <option value="" selected>Select a date and time</option>
                     </select>
                 </div>
             </div>
@@ -1059,7 +993,7 @@
             <h3 id="cart-grand-total">Grand Total: $${grandTotal.toFixed(2)}</h3>
             <hr>
         `;
-
+             
         // Populate time options and set initial state
         populateTimeOptions();
         updateMeetupDateTimeState(); // Set initial visibility based on default selection
@@ -1073,9 +1007,8 @@
             itemDiv.classList.add('cart-item-checkout');
             itemDiv.innerHTML = `
                 <div class="cart-item-summary">
-                    <span class="cart-item-code-qty">${item.productId} Product:${item.productName} Qty=${item.quantity}</span>
-                    <span class="cart-item-prices">$${itemTotal.toFixed(2)})</span>
-                    <div>Product Base Price: (${item.price.toFixed(2)}</div>
+                    <span class="cart-item-code-qty">${item.productId} Qty= ${item.quantity}</span>
+                    <span class="cart-item-prices">$${itemTotal.toFixed(2)} (${item.price.toFixed(2)})</span>
                 </div>
                 <div class="cart-item-options">
                     <ul>
@@ -1120,37 +1053,101 @@
         });
     }
 
+/*// Get references to the elements
+const deliveryOptionsEle = document.getElementById("deliveryOptions");
+const hourInputEle = document.getElementById("hourInput");
+const submitButtonEle = document.querySelector("#dateTimeForm button[type='submit']"); // Select the submit button within the form
+*/
+// Function to initialize and handle the state of hourInput and submitButton
+/*function updateMeetupDateTimeState() {
+    // Get references to the elements
+    const deliveryOptionsEle = document.getElementById("deliveryOptions");
+    const hourInputEle = document.getElementById("hourInput");
+    const submitButtonEle = document.getElementById("send-order-btn"); // Select the submit button within the form  
+    // Check if the selected option in deliveryOptions is "By MeetUp Marsiling MRT"
+    if (deliveryOptionsEle.value === "By MeetUp Marsiling MRT") {
+        hourInputEle.disabled = false; // Enable the hourInput select
+        //submitButtonEle.disabled = false; // Enable the submit button
+    } else {
+        hourInputEle.disabled = true; // Disable the hourInput select
+        //submitButtonEle.disabled = true; // Disable the submit button
+        // Optionally, reset the hourInput to its placeholder
+        hourInputEle.value = ""; 
+    }
+}*/
+
+// Attach an event listener to the deliveryOptions select
+//deliveryOptionsEle.addEventListener("change", updateMeetupDateTimeState);
+
+// --- Your existing populateTimeOptions function (with slight modification for hourInput ID) ---
     function populateTimeOptions() {
-        const dateTimeInput = document.getElementById('dateTimeInput');
-        dateTimeInput.innerHTML = '<option value="" disabled selected>Select a date and time</option>'; // Clear existing options
+        const hourInput = document.getElementById("hourInput"); // Corrected ID
+        hourInput.innerHTML = '<option value="" disabled selected>Select a date and time</option>'; // Corrected placeholder line
 
         const now = new Date();
-        now.setHours(now.getHours() + 1); // Start from next hour to avoid past times on current day
+        let currentOptionTime = new Date(now.getTime() + 20 * 60 * 1000); // Start 20 minutes from now
 
-        for (let i = 0; i < 7; i++) { // Generate options for the next 7 days
-            const date = new Date(now);
-            date.setDate(now.getDate() + i);
+        const allowedHours = [12, 13, 18, 19, 20, 21]; // 12 PM, 1 PM, 6 PM, 7 PM, 8 PM, 9 PM
 
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
-            const dateString = `${year}-${month}-${day}`;
+        for (let i = 0; i < 36; i++) {
+            let hour = currentOptionTime.getHours();
+            let minute = currentOptionTime.getMinutes();
 
-            // Define specific time slots for meetup (e.g., every half hour from 9 AM to 9 PM)
-            for (let hour = 9; hour <= 21; hour++) { // From 9 AM to 9 PM
-                for (let minute = 0; minute < 60; minute += 30) {
-                    const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-                    const dateTimeValue = `${dateString} ${timeString}`;
-                    const dateTimeDisplay = `${dateString} ${timeString}`;
-
-                    const option = document.createElement('option');
-                    option.value = dateTimeValue;
-                    option.textContent = dateTimeDisplay;
-                    dateTimeInput.appendChild(option);
-                }
+            // Round up to the next 30-minute interval (0 or 30)
+            if (minute > 30) {
+                currentOptionTime.setHours(hour + 1);
+                currentOptionTime.setMinutes(0);
+            } else if (minute > 0 && minute <= 30) {
+                currentOptionTime.setMinutes(30);
+            } else if (minute < 0) { // Should not happen but for safety
+                currentOptionTime.setMinutes(0);
             }
+
+            hour = currentOptionTime.getHours();
+            minute = currentOptionTime.getMinutes();
+            
+            // Adjust for allowed hours
+            while (!allowedHours.includes(hour) || (hour === 21 && minute > 30)) {
+                if (hour >= 21 && minute >= 30) { // If past 9:30 PM, go to next day 12 PM
+                    currentOptionTime.setDate(currentOptionTime.getDate() + 1);
+                    currentOptionTime.setHours(12);
+                    currentOptionTime.setMinutes(0);
+                } else { // Increment hour until an allowed hour is found
+                    currentOptionTime.setHours(hour + 1);
+                    currentOptionTime.setMinutes(0); // Reset minutes when changing hour
+                }
+                hour = currentOptionTime.getHours();
+                minute = currentOptionTime.getMinutes();
+            }
+
+            // Format the date and time
+            const day = currentOptionTime.getDate();
+            const month = currentOptionTime.toLocaleString('en-US', {
+                month: 'long'
+            });
+            const year = currentOptionTime.getFullYear();
+            const formattedHour = hour > 12 ? hour - 12 : hour;
+            const ampm = hour >= 12 ? 'pm' : 'am';
+            const formattedMinute = minute.toString().padStart(2, '0');
+
+            const optionText = `${day} ${month} ${year} ${formattedHour}:${formattedMinute}${ampm}`;
+            const optionValue = currentOptionTime.toISOString(); // Use ISO string for value for easy parsing later
+
+            const option = document.createElement("option");
+            option.value = optionValue;
+            option.textContent = optionText;
+            hourInput.appendChild(option);
+
+            // Increment for the next option (30 minutes)
+            currentOptionTime.setMinutes(currentOptionTime.getMinutes() + 30);
         }
     }
+
+    // Call populateTimeOptions once to fill the hourInput initially
+    //populateTimeOptions(); 
+
+    // Call updateMeetupDateTimeState once on page load to set the initial state
+    //document.addEventListener("DOMContentLoaded", updateMeetupDateTimeState);
 
     function updateMeetupDateTimeState() {
         const deliveryOption = document.getElementById('deliveryOptions').value;
@@ -1158,10 +1155,10 @@
 
         if (deliveryOption === "By MeetUp Marsiling MRT") {
             dateTimeForm.style.display = 'block'; // Show the date/time picker
-            document.getElementById('dateTimeInput').setAttribute('required', 'true');
+            document.getElementById('hourInput').setAttribute('required', 'true');
         } else {
             dateTimeForm.style.display = 'none'; // Hide the date/time picker
-            document.getElementById('dateTimeInput').removeAttribute('required');
+            document.getElementById('hourInput').removeAttribute('required');
         }
     }
 
@@ -1173,7 +1170,7 @@
             if (document.getElementById('send-order-btn')) { // If in checkout view
                 renderCheckoutContent();
             } else {
-                renderCartContent();
+                renderCartContent("No");
             }
         }
     }
@@ -1183,26 +1180,31 @@
         if (cart[index]) {
             if (cart[index].quantity > 1) {
                 cart[index].quantity--;
-                
             } else {
                 cart.splice(index, 1); 
             }
             if (document.getElementById('send-order-btn')) { // If in checkout view
                 renderCheckoutContent();
             } else {
-                renderCartContent();
+                renderCartContent("No");
             }
         }
     }
 
     function sendOrderToWhatsApp() {
+        const selectedHourIndex=(document.getElementById('hourInput').selectedIndex)
+        const deliveryChosen = document.getElementById('deliveryOptions').value;
+        if (selectedHourIndex < 1 && deliveryChosen.includes("MeetUp")){
+            alert("Please select the required meetup time");
+            return;
+        }
         const store = stores.find(s => s.StoreId === currentStoreId);
         if (!store) {
             alert("Store information not found.");
             return;
         }
-
-        let message = `Hello ${store.StoreName},\n\nMy order details:\n\n`;
+        let orderId = generateOrderNo();
+        let message = `Hello ${store.StoreName},\nMy order details:ID= ${generateOrderNo()}\n`;
         let grandTotal = 0;
 
         cart.forEach((item, index) => {
@@ -1230,16 +1232,32 @@
         message += `Delivery Option: ${deliveryOption}\n`;
 
         // Add date/time if selected and visible
-        const dateTimeInput = document.getElementById('dateTimeInput');
+        const dateTimeInput = document.getElementById('hourInput');
         const dateTimeForm = document.getElementById('dateTimeForm');
         if (dateTimeForm.style.display !== 'none' && dateTimeInput && dateTimeInput.value) {
             message += `Selected Date/Time: ${dateTimeInput.value}\n`;
         }
-
+        
         message += `\nThank you!`;
-
+        console.log(message);
         const whatsappUrl = `https://wa.me/${store.StorePhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
+        // remove item in localStorage and cart element
+        localStorage.removeItem('cart');
+        cart = []; // Add this line to clear the cart variable in memory
+        const cartDiv = document.getElementById('cart');
+        cartDiv.innerHTML = ''; // Clear previous content
+        //   const orderedElements = document.querySelectorAll('.ordered');
+        //   orderedElements.forEach((element) => {
+        //     element.remove();
+        //   });
+        document.getElementById('cart-total').textContent=0;
+        document.getElementById('cart-count').textContent=0;
+        //document.getElementById("cart-grand-total").textContent="$0";
+         //end whatsapp check out
+        //document.getElementById("checkOutBtn").style.display = "none";
+        //document.getElementById("cart").style.display = "none";
+        //document.getElementById("cart-close").style.display = "none";
     }
 
 
@@ -1317,7 +1335,7 @@
             });
         }
         
-        renderCartContent();
+        renderCartContent("No");
         showMessageBox();
         //toggleOption(productId, 'none'); 
         clearAllOptionsExceptForProduct(productId); 
@@ -1330,7 +1348,7 @@
         if (document.getElementById('send-order-btn')) { // If in checkout view
             renderCheckoutContent();
         } else {
-            renderCartContent();
+            renderCartContent("No");
         }
     }
 
@@ -1372,14 +1390,6 @@
             <img id="store-logo" src="${store.LogoImg}" alt="${store.StoreName} Logo">
         `;
         document.getElementById('store-msg').textContent = store.PromotionMessage;
-        //document.getElementById('announcement').textContent = store.Annoncement;
-        document.getElementById('announcement').innerHTML = `
-          <span>${store.Annoncement}</span>
-          <a href="https://wa.me/6591234567?text=Large%20Order%20Enquiry%0AMy%20address%20is%20.." target="_blank" class="whatsapp-link">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon">
-          </a>
-        `;
-
     }
 
     function displayProducts(products) {
@@ -1407,23 +1417,24 @@
                 const groupDiv = document.createElement('div');
                 groupDiv.classList.add('options-group');
                 groupDiv.innerHTML = `<h5>${optionGroup}:</h5>`;
+                // Iterate directly over the product.Options[optionGroup] object
+                Object.entries(product.Options[optionGroup]).forEach(([optionName, optionPrice]) => {
+                    const label = document.createElement('label');
+                    const inputType = optionGroup === 'Drink' ? 'checkbox' : 'radio';
+                    const isChecked = (optionPrice === 0); // Default select "No Thanks"
 
-                if (product.Options[optionGroup] && product.Options[optionGroup][0]) {
-                    Object.entries(product.Options[optionGroup][0]).forEach(([optionName, optionPrice]) => {
-                        const label = document.createElement('label');
-                        const inputType = optionGroup === 'Drink' ? 'checkbox' : 'radio';
-                        label.innerHTML = `
-                            <input type="${inputType}" name="${product.Id}_${optionGroup}" value="${optionName}" data-price="${optionPrice}">
-                            ${optionName} ($${optionPrice.toFixed(2)})
-                        `;
-                        groupDiv.appendChild(label);
-                    });
-                }
+                    label.innerHTML = `
+                        <input type="${inputType}" name="${product.Id}_${optionGroup}" value="${optionName}" data-price="${optionPrice}" ${isChecked ? 'checked' : ''}>
+                        ${optionName} ($${optionPrice.toFixed(2)})
+                    `;
+                    groupDiv.appendChild(label);
+                    
+                });
+
                 optionsContainer.appendChild(groupDiv);
             }
             productContainer.appendChild(productCard);
         });
-
         // Add event listeners for toggle and add to cart buttons
         document.querySelectorAll('.toggleOption').forEach(button => {
             button.addEventListener('click', (event) => {
@@ -1431,14 +1442,12 @@
                 toggleOption(productId);
             });
         });
-
         document.querySelectorAll('.add2Cart').forEach(button => {
             button.addEventListener('click', (event) => {
                 const productId = event.target.dataset.productId;
                 addProductToCart(productId);
             });
         });
-
         // Add event listeners for option changes
         document.querySelectorAll('.options-group input').forEach(input => {
             input.addEventListener('change', handleOptionChange);
@@ -1460,7 +1469,7 @@
 
         const toggleButton = productCard.querySelector('.toggleOption');
         toggleButton.textContent = isHidden ? 'Hide Options' : 'Options';
-        //Clear option by setting each option to false
+
         if (isHidden) {
             selectedOptions = {}; 
             productCard.querySelectorAll('.options-group input').forEach(input => {
@@ -1537,7 +1546,7 @@
         const urlParams = getUrlParams();
         const storeIdFromUrl = urlParams['StoreID'];
 
-        const defaultStore = stores[0];
+        const defaultStore = stores[1];
         currentStoreId = storeIdFromUrl || defaultStore.StoreId;
 
         const store = stores.find(s => s.StoreId === currentStoreId);
@@ -1588,3 +1597,4 @@
     </script>
 </body>
 </html>
+
